@@ -1,0 +1,26 @@
+version: "3"
+services:
+  database:
+    container_name: triple_mileage_mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: triple
+      MYSQL_USER: triple
+      MYSQL_PASSWORD: triple
+      MYSQL_ROOT_PASSWORD: triple
+      TZ: Asia/Seoul
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ./db/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci','--default-time-zone=+09:00']
+  app:
+    container_name: triple_mileage_events_app
+    build: .
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - database
