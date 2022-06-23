@@ -1,5 +1,6 @@
 package com.triple.homework.user.domain;
 
+import com.triple.homework.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @Column(name = "USER_ID", length = 36)
