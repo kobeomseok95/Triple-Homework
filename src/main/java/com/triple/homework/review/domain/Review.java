@@ -16,7 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"USER_ID", "PLACE_ID"})
+        @UniqueConstraint(columnNames = {"userId", "placeId"})
 })
 @SQLDelete(sql = "UPDATE REVIEW SET IS_DELETED = true WHERE REVIEW_ID = ?")
 @Where(clause = "IS_DELETED=false")
