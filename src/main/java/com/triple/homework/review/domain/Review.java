@@ -19,7 +19,7 @@ import javax.persistence.*;
         @UniqueConstraint(columnNames = {"USER_ID", "PLACE_ID"})
 })
 @SQLDelete(sql = "UPDATE REVIEW SET IS_DELETED = true WHERE REVIEW_ID = ?")
-@Where(clause = "DELETED=false")
+@Where(clause = "IS_DELETED=false")
 public class Review extends BaseEntity {
 
     @Id
@@ -36,5 +36,5 @@ public class Review extends BaseEntity {
     private String content;
 
     @Column(nullable = false, columnDefinition = "TINYINT")
-    private boolean deleted;
+    private boolean isDeleted;
 }
