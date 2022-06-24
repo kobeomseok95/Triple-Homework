@@ -24,15 +24,15 @@ public class ErrorResponse {
         this.time = LocalDateTime.now();
         this.status = HttpStatus.BAD_REQUEST.value();
         this.message = e.getMessage();
-        this.code = 100;
+        this.code = e.getErrorEnumCode().getCode();
         this.errors = Collections.emptyList();
     }
 
     private ErrorResponse(BindingResult bindingResult) {
         this.time = LocalDateTime.now();
         this.status = HttpStatus.BAD_REQUEST.value();
-        this.message = ClientErrorCode.BIND_EXCEPTION.getMessage();
-        this.code = ClientErrorCode.BIND_EXCEPTION.getCode();
+        this.message = ClientErrorCode.INVALID_REQUEST.getMessage();
+        this.code = ClientErrorCode.INVALID_REQUEST.getCode();
         this.errors = FieldErrorResponse.of(bindingResult);
     }
 

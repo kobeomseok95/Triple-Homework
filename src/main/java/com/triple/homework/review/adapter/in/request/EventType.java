@@ -10,5 +10,5 @@ public enum EventType {
     REVIEW("REVIEW"),
     ;
 
-    private String value;
+    private final String value;
 }

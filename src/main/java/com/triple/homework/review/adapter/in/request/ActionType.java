@@ -12,5 +12,5 @@ public enum ActionType {
     DELETE("DELETE"),
     ;
 
-    private String value;
+    private final String value;
 }
