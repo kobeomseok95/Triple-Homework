@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class ReviewEventRestControllerTest extends RestControllerTestSupport {
 
-    @DisplayName("이벤트 받기 - 유효하지 않은 입력값 테스트")
+    @DisplayName("이벤트 받기 - 유효하지 않은 입력값이 주어진 경우")
     @ParameterizedTest
     @MethodSource("invalidTypeActions")
     void review_events_test_fail_invalid_type_actions(ReviewEventRequest reviewEventRequest, int errorCounts) throws Exception {
