@@ -14,9 +14,11 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class ReviewEventRestController {
 
+    private final ReviewEventDelegator reviewEventDelegator;
+
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.OK)
     public void event(@RequestBody @Valid ReviewEventRequest reviewEventRequest) {
-
+        reviewEventDelegator.handle(reviewEventRequest);
     }
 }
