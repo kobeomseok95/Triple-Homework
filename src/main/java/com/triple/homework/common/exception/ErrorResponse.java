@@ -28,8 +28,20 @@ public class ErrorResponse {
         this.errors = Collections.emptyList();
     }
 
-    public static ErrorResponse of(ApplicationException e) {
+    private ErrorResponse(BindingResult bindingResult) {
+        this.time = LocalDateTime.now();
+        this.status = HttpStatus.BAD_REQUEST.value();
+        this.message = ClientErrorCode.BIND_EXCEPTION.getMessage();
+        this.code = ClientErrorCode.BIND_EXCEPTION.getCode();
+        this.errors = FieldErrorResponse.of(bindingResult);
+    }
+
+    public static ErrorResponse ofApplicationException(ApplicationException e) {
         return new ErrorResponse(e);
+    }
+
+    public static ErrorResponse ofBindException(BindingResult bindingResult) {
+        return new ErrorResponse(bindingResult);
     }
 
     @Getter
