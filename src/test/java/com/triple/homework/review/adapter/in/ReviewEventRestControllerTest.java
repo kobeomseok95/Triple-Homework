@@ -52,7 +52,7 @@ class ReviewEventRestControllerTest extends RestControllerTestSupport {
     void review_events_success() throws Exception {
 
         // given
-        ReviewEventRequest request = ReviewEventRequestBuilder.build();
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildAdd();
 
         // when, then
         mockMvc.perform(post("/events")

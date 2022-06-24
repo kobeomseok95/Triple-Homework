@@ -1,6 +1,7 @@
 package com.triple.homework.review.adapter.in.request;
 
 import com.triple.homework.common.validation.EnumValid;
+import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -39,4 +40,14 @@ public class ReviewEventRequest {
 
     @NotBlank(message = "장소 ID를 입력해주세요.")
     private String placeId;
+
+    public ReviewEventRequestDto toRequestDto() {
+        return ReviewEventRequestDto.builder()
+                .reviewId(reviewId)
+                .content(content)
+                .attachedPhotoIds(attachedPhotoIds)
+                .userId(userId)
+                .placeId(placeId)
+                .build();
+    }
 }
