@@ -1,5 +1,6 @@
 package com.triple.homework.review.adapter.in;
 
+import com.triple.homework.common.exception.review.EventActionNotFoundException;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequest;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class ReviewEventDelegator {
         reviewEventHandleUseCases.stream()
                 .filter(useCase -> useCase.getCode().equals(reviewEventRequest.getAction()))
                 .findFirst()
-                .orElseThrow()
-                .handle(reviewEventRequest.toRequestDto());
+                .orElseThrow(EventActionNotFoundException::new)
+                .handleEvent(reviewEventRequest.toRequestDto());
     }
 }

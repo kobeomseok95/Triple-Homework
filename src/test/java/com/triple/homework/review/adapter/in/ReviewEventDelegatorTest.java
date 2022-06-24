@@ -1,5 +1,6 @@
 package com.triple.homework.review.adapter.in;
 
+import com.triple.homework.common.exception.review.EventActionNotFoundException;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequest;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequestBuilder;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,7 +54,7 @@ class ReviewEventDelegatorTest {
         reviewEventDelegator.handle(request);
 
         // then
-        verify(addReviewEventHandler).handle(any(ReviewEventRequestDto.class));
+        verify(addReviewEventHandler).handleEvent(any(ReviewEventRequestDto.class));
     }
 
     @DisplayName("MOD 이벤트 발생")
@@ -68,7 +70,7 @@ class ReviewEventDelegatorTest {
         reviewEventDelegator.handle(request);
 
         // then
-        verify(modifyReviewEventHandler).handle(any(ReviewEventRequestDto.class));
+        verify(modifyReviewEventHandler).handleEvent(any(ReviewEventRequestDto.class));
     }
 
     @DisplayName("DELETE 이벤트 발생")
@@ -85,6 +87,21 @@ class ReviewEventDelegatorTest {
         reviewEventDelegator.handle(request);
 
         // then
-        verify(deleteReviewEventHandler).handle(any(ReviewEventRequestDto.class));
+        verify(deleteReviewEventHandler).handleEvent(any(ReviewEventRequestDto.class));
+    }
+
+    @DisplayName("이벤트가 없을 경우 예외 발생")
+    @Test
+    void event_not_found_throw_exception() throws Exception {
+
+        // given
+        when(addReviewEventHandler.getCode()).thenReturn("ADD");
+        when(modifyReviewEventHandler.getCode()).thenReturn("MOD");
+        when(deleteReviewEventHandler.getCode()).thenReturn("DELETE");
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildInvalidTypeAction();
+
+        // when, then
+        assertThrows(EventActionNotFoundException.class,
+                () -> reviewEventDelegator.handle(request));
     }
 }

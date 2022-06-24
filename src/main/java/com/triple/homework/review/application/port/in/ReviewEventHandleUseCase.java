@@ -6,5 +6,5 @@ public interface ReviewEventHandleUseCase {
 
     String getCode();
 
-    void handle(ReviewEventRequestDto reviewEventRequestDto);
+    void handleEvent(ReviewEventRequestDto reviewEventRequestDto);
 }
