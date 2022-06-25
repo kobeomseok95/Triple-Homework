@@ -3,11 +3,11 @@ package com.triple.homework.common.exception.review;
 import com.triple.homework.common.exception.ApplicationException;
 import com.triple.homework.common.exception.ErrorEnumCode;
 
-public class EventActionNotFoundException extends ApplicationException {
+public class WrittenReviewByUserAndPlaceException extends ApplicationException {
 
-    private static final ErrorEnumCode CODE = ReviewErrorCode.NOT_FOUND_ACTION;
+    private static final ErrorEnumCode CODE = ReviewErrorCode.WRITTEN_REVIEW;
 
-    public EventActionNotFoundException() {
+    public WrittenReviewByUserAndPlaceException() {
         super(CODE);
     }
 }

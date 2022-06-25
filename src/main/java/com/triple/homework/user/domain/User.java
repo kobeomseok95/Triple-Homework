@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,4 +23,15 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private Long pointScore;
+
+    public static User from(String userId, Long point) {
+        return User.builder()
+                .id(userId)
+                .pointScore(point)
+                .build();
+    }
+
+    public void calculate(Long point) {
+        // TODO: 2022/06/25 kobeomseok95 implements
+    }
 }
