@@ -9,6 +9,7 @@ ENV TZ=Asia/Seoul
 ENTRYPOINT [ \
             "java", \
             "-Duser.timezone=${TZ}", \
+            "-Dspring.profiles.active=local", \
             "-jar", \
             "/app.jar" \
 ]
