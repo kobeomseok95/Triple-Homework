@@ -7,4 +7,6 @@ public interface ReviewRepository {
     boolean existsByUserIdAndPlaceId(String userId, String placeId);
 
     Review save(Review review);
+
+    boolean existsByPlaceId(String placeId);
 }

@@ -17,4 +17,32 @@ public class ReviewEventRequestDtoBuilder {
                 ))
                 .build();
     }
+
+    public static ReviewEventRequestDto buildNoContent() {
+        return ReviewEventRequestDto.builder()
+                .reviewId(UUID.randomUUID().toString())
+                .userId(UUID.randomUUID().toString())
+                .placeId(UUID.randomUUID().toString())
+                .build();
+    }
+
+    public static ReviewEventRequestDto buildHaveText() {
+        return ReviewEventRequestDto.builder()
+                .reviewId(UUID.randomUUID().toString())
+                .userId(UUID.randomUUID().toString())
+                .placeId(UUID.randomUUID().toString())
+                .content("테")
+                .build();
+    }
+
+    public static ReviewEventRequestDto buildHavePhoto() {
+        return ReviewEventRequestDto.builder()
+                .reviewId(UUID.randomUUID().toString())
+                .userId(UUID.randomUUID().toString())
+                .placeId(UUID.randomUUID().toString())
+                .attachedPhotoIds(List.of(
+                        UUID.randomUUID().toString()
+                ))
+                .build();
+    }
 }
