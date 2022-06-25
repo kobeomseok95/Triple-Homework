@@ -3,8 +3,10 @@ package com.triple.homework.review.application.service;
 import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
+import com.triple.homework.review.application.port.out.AttachedPhotoRepository;
 import com.triple.homework.review.application.port.out.ReviewRepository;
 import com.triple.homework.review.application.port.out.ReviewToUserRepository;
+import com.triple.homework.review.domain.AttachedPhoto;
 import com.triple.homework.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
     private final ReviewRepository reviewRepository;
     private final CalculateReviewPointService calculateReviewPointService;
     private final ReviewToUserRepository userRepository;
+    private final AttachedPhotoRepository attachedPhotoRepository;
 
     @Override
     public String getCode() {
@@ -36,5 +39,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
                         user -> user.calculate(point),
                         () -> userRepository.save(User.from(reviewEventRequestDto.getUserId(), point)));
         reviewRepository.save(reviewEventRequestDto.toReview());
+        attachedPhotoRepository.saveAll(AttachedPhoto.from(reviewEventRequestDto.getReviewId(),
+                reviewEventRequestDto.getAttachedPhotoIds()));
     }
 }

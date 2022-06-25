@@ -5,9 +5,9 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -27,4 +27,18 @@ public class AttachedPhoto extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "TINYINT")
     private boolean isDeleted;
+
+    public static List<AttachedPhoto> from(String reviewId, List<String> attachedPhotoIds) {
+        return attachedPhotoIds.stream()
+                .map(attachedPhotoId -> from(reviewId, attachedPhotoId))
+                .collect(Collectors.toList());
+    }
+
+    private static AttachedPhoto from(String reviewId, String attachedPhotoId) {
+        return AttachedPhoto.builder()
+                .id(attachedPhotoId)
+                .reviewId(reviewId)
+                .isDeleted(false)
+                .build();
+    }
 }

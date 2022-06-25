@@ -4,6 +4,7 @@ import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceEx
 import com.triple.homework.fixture.UserFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
+import com.triple.homework.review.application.port.out.AttachedPhotoRepository;
 import com.triple.homework.review.application.port.out.ReviewRepository;
 import com.triple.homework.review.application.port.out.ReviewToUserRepository;
 import com.triple.homework.review.domain.Review;
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,6 +29,7 @@ class AddReviewEventServiceTest {
     @Mock ReviewRepository reviewRepository;
     @Mock CalculateReviewPointService calculateReviewPointService;
     @Mock ReviewToUserRepository userRepository;
+    @Mock AttachedPhotoRepository attachedPhotoRepository;
     @InjectMocks AddReviewEventService addReviewEventService;
 
     @DisplayName("ADD 이벤트 실패 - 유저가 이미 장소에 대한 리뷰가 있는 경우")
@@ -65,7 +68,8 @@ class AddReviewEventServiceTest {
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userRepository).findById(requestDto.getUserId()),
                 () -> verify(userRepository).save(any(User.class)),
-                () -> verify(reviewRepository).save(any(Review.class))
+                () -> verify(reviewRepository).save(any(Review.class)),
+                () -> verify(attachedPhotoRepository).saveAll(any(List.class))
         );
     }
 
@@ -91,7 +95,8 @@ class AddReviewEventServiceTest {
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userRepository).findById(requestDto.getUserId()),
                 () -> verify(userRepository, times(0)).save(any(User.class)),
-                () -> verify(reviewRepository).save(any(Review.class))
+                () -> verify(reviewRepository).save(any(Review.class)),
+                () -> verify(attachedPhotoRepository).saveAll(any(List.class))
         );
     }
 }
