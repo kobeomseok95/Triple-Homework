@@ -32,6 +32,6 @@ public class User extends BaseEntity {
     }
 
     public void calculate(Long point) {
-        // TODO: 2022/06/25 kobeomseok95 implements
+        pointScore += point;
     }
 }
