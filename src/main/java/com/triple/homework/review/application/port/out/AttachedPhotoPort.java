@@ -4,7 +4,7 @@ import com.triple.homework.review.domain.AttachedPhoto;
 
 import java.util.List;
 
-public interface AttachedPhotoRepository {
+public interface AttachedPhotoPort {
 
     List<AttachedPhoto> saveAll(Iterable<AttachedPhoto> attachedPhotos);
 }

@@ -2,7 +2,7 @@ package com.triple.homework.review.application.port.out;
 
 import com.triple.homework.review.domain.Review;
 
-public interface ReviewRepository {
+public interface ReviewPort {
 
     boolean existsByUserIdAndPlaceId(String userId, String placeId);
 

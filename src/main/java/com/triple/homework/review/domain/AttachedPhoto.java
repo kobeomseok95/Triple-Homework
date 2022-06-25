@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @SQLDelete(sql = "UPDATE ATTACHED_PHOTO SET IS_DELETED = true WHERE ATTACHED_PHOTO_ID = ?")
-@Where(clause = "IS_DELETED=false")
+@Where(clause = "IS_DELETED=0")
 public class AttachedPhoto extends BaseEntity {
 
     @Id

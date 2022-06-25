@@ -3,9 +3,9 @@ package com.triple.homework.review.application.service;
 import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
-import com.triple.homework.review.application.port.out.AttachedPhotoRepository;
-import com.triple.homework.review.application.port.out.ReviewRepository;
-import com.triple.homework.review.application.port.out.ReviewToUserRepository;
+import com.triple.homework.review.application.port.out.AttachedPhotoPort;
+import com.triple.homework.review.application.port.out.ReviewPort;
+import com.triple.homework.review.application.port.out.ReviewToUserPort;
 import com.triple.homework.review.domain.AttachedPhoto;
 import com.triple.homework.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class AddReviewEventService implements ReviewEventHandleUseCase {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewPort reviewPort;
     private final CalculateReviewPointService calculateReviewPointService;
-    private final ReviewToUserRepository userRepository;
-    private final AttachedPhotoRepository attachedPhotoRepository;
+    private final ReviewToUserPort userRepository;
+    private final AttachedPhotoPort attachedPhotoPort;
 
     @Override
     public String getCode() {
@@ -30,7 +30,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
     @Override
     public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         // TODO: 2022/06/25 kobeomseok95 Validator 계층으로 분리
-        if (reviewRepository.existsByUserIdAndPlaceId(reviewEventRequestDto.getUserId(), reviewEventRequestDto.getPlaceId())) {
+        if (reviewPort.existsByUserIdAndPlaceId(reviewEventRequestDto.getUserId(), reviewEventRequestDto.getPlaceId())) {
             throw new WrittenReviewByUserAndPlaceException();
         }
         Long point = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
@@ -38,8 +38,8 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
                 .ifPresentOrElse(
                         user -> user.calculate(point),
                         () -> userRepository.save(User.from(reviewEventRequestDto.getUserId(), point)));
-        reviewRepository.save(reviewEventRequestDto.toReview());
-        attachedPhotoRepository.saveAll(AttachedPhoto.from(reviewEventRequestDto.getReviewId(),
+        reviewPort.save(reviewEventRequestDto.toReview());
+        attachedPhotoPort.saveAll(AttachedPhoto.from(reviewEventRequestDto.getReviewId(),
                 reviewEventRequestDto.getAttachedPhotoIds()));
     }
 }

@@ -4,9 +4,9 @@ import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceEx
 import com.triple.homework.fixture.UserFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
-import com.triple.homework.review.application.port.out.AttachedPhotoRepository;
-import com.triple.homework.review.application.port.out.ReviewRepository;
-import com.triple.homework.review.application.port.out.ReviewToUserRepository;
+import com.triple.homework.review.application.port.out.AttachedPhotoPort;
+import com.triple.homework.review.application.port.out.ReviewPort;
+import com.triple.homework.review.application.port.out.ReviewToUserPort;
 import com.triple.homework.review.domain.Review;
 import com.triple.homework.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
@@ -26,10 +26,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AddReviewEventServiceTest {
 
-    @Mock ReviewRepository reviewRepository;
+    @Mock
+    ReviewPort reviewPort;
     @Mock CalculateReviewPointService calculateReviewPointService;
-    @Mock ReviewToUserRepository userRepository;
-    @Mock AttachedPhotoRepository attachedPhotoRepository;
+    @Mock
+    ReviewToUserPort userRepository;
+    @Mock
+    AttachedPhotoPort attachedPhotoPort;
     @InjectMocks AddReviewEventService addReviewEventService;
 
     @DisplayName("ADD 이벤트 실패 - 유저가 이미 장소에 대한 리뷰가 있는 경우")
@@ -38,7 +41,7 @@ class AddReviewEventServiceTest {
 
         // given
         ReviewEventRequestDto requestDto = mock(ReviewEventRequestDto.class);
-        when(reviewRepository.existsByUserIdAndPlaceId(any(), any()))
+        when(reviewPort.existsByUserIdAndPlaceId(any(), any()))
                 .thenReturn(true);
 
         // when, then
@@ -52,7 +55,7 @@ class AddReviewEventServiceTest {
 
         // given
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
-        when(reviewRepository.existsByUserIdAndPlaceId(any(), any()))
+        when(reviewPort.existsByUserIdAndPlaceId(any(), any()))
                 .thenReturn(false);
         when(calculateReviewPointService.calculatePoint(requestDto))
                 .thenReturn(3L);
@@ -64,12 +67,12 @@ class AddReviewEventServiceTest {
 
         // then
         assertAll(
-                () -> verify(reviewRepository).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
+                () -> verify(reviewPort).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userRepository).findById(requestDto.getUserId()),
                 () -> verify(userRepository).save(any(User.class)),
-                () -> verify(reviewRepository).save(any(Review.class)),
-                () -> verify(attachedPhotoRepository).saveAll(any(List.class))
+                () -> verify(reviewPort).save(any(Review.class)),
+                () -> verify(attachedPhotoPort).saveAll(any(List.class))
         );
     }
 
@@ -79,7 +82,7 @@ class AddReviewEventServiceTest {
 
         // given
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
-        when(reviewRepository.existsByUserIdAndPlaceId(any(), any()))
+        when(reviewPort.existsByUserIdAndPlaceId(any(), any()))
                 .thenReturn(false);
         when(calculateReviewPointService.calculatePoint(requestDto))
                 .thenReturn(3L);
@@ -91,12 +94,12 @@ class AddReviewEventServiceTest {
 
         // then
         assertAll(
-                () -> verify(reviewRepository).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
+                () -> verify(reviewPort).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userRepository).findById(requestDto.getUserId()),
                 () -> verify(userRepository, times(0)).save(any(User.class)),
-                () -> verify(reviewRepository).save(any(Review.class)),
-                () -> verify(attachedPhotoRepository).saveAll(any(List.class))
+                () -> verify(reviewPort).save(any(Review.class)),
+                () -> verify(attachedPhotoPort).saveAll(any(List.class))
         );
     }
 }

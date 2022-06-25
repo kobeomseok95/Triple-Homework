@@ -1,7 +1,7 @@
 package com.triple.homework.review.application.service;
 
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
-import com.triple.homework.review.application.port.out.ReviewRepository;
+import com.triple.homework.review.application.port.out.ReviewPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 class CalculateReviewPointService {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewPort reviewPort;
 
     public Long calculatePoint(ReviewEventRequestDto requestDto) {
         Long point = 0L;
@@ -39,6 +39,6 @@ class CalculateReviewPointService {
     }
 
     private boolean isFirstReview(String placeId) {
-        return !reviewRepository.existsByPlaceId(placeId);
+        return !reviewPort.existsByPlaceId(placeId);
     }
 }

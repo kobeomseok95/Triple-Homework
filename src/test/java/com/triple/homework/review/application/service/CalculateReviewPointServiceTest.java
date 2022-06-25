@@ -2,7 +2,7 @@ package com.triple.homework.review.application.service;
 
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
-import com.triple.homework.review.application.port.out.ReviewRepository;
+import com.triple.homework.review.application.port.out.ReviewPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +21,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CalculateReviewPointServiceTest {
 
-    @Mock ReviewRepository reviewRepository;
+    @Mock
+    ReviewPort reviewPort;
     @InjectMocks CalculateReviewPointService calculateReviewPointService;
 
     @DisplayName("점수 계산 테스트")
@@ -30,7 +31,7 @@ class CalculateReviewPointServiceTest {
     void calculate_point_test(ReviewEventRequestDto requestDto, Long expectedPoint) throws Exception {
 
         // given
-        when(reviewRepository.existsByPlaceId(any()))
+        when(reviewPort.existsByPlaceId(any()))
                 .thenReturn(true);
 
         // when, then
@@ -53,7 +54,7 @@ class CalculateReviewPointServiceTest {
     void calculate_point_test_first_review(ReviewEventRequestDto requestDto, Long expectedPoint) throws Exception {
 
         // given
-        when(reviewRepository.existsByPlaceId(any()))
+        when(reviewPort.existsByPlaceId(any()))
                 .thenReturn(false);
 
         // when, then

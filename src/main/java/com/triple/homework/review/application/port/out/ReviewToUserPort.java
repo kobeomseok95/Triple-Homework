@@ -4,7 +4,7 @@ import com.triple.homework.user.domain.User;
 
 import java.util.Optional;
 
-public interface ReviewToUserRepository {
+public interface ReviewToUserPort {
 
     Optional<User> findById(String userId);
 
