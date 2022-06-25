@@ -1,18 +1,23 @@
 spring:
+  profiles:
+    default: test
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: triple
-    password: triple
-    url: jdbc:mysql://database:3306/triple
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MYSQL;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQL57Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
         format_sql: true
+  h2:
+    console:
+      enabled: true
 management:
   endpoints:
     web:
@@ -23,3 +28,25 @@ management:
     health:
       enabled: true
       show-details: always
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: triple
+    password: triple
+    url: jdbc:mysql://database:3306/triple
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+  h2:
+    console:
+      enabled: false
