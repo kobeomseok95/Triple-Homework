@@ -20,7 +20,6 @@ class AttachedPhotoRepository implements AttachedPhotoPort {
 
     @Override
     public List<AttachedPhoto> findByReviewId(String reviewId) {
-        // TODO: 2022/06/26 kobeomseok95 implements
-        return null;
+        return attachedPhotoJpaRepository.findByReviewId(reviewId);
     }
 }

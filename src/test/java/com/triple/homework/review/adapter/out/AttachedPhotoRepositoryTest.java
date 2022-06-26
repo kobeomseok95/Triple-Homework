@@ -3,7 +3,6 @@ package com.triple.homework.review.adapter.out;
 import com.triple.homework.fixture.AttachedPhotoFixture;
 import com.triple.homework.review.domain.AttachedPhoto;
 import com.triple.homework.support.JpaRepositoryTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @Import({AttachedPhotoRepository.class})
 class AttachedPhotoRepositoryTest extends JpaRepositoryTest {
@@ -46,7 +46,21 @@ class AttachedPhotoRepositoryTest extends JpaRepositoryTest {
     void review_saveAll_success_empty_list() throws Exception {
 
         // when, then
-        Assertions.assertDoesNotThrow(() -> attachedPhotoRepository.saveAll(Collections.emptyList()));
+        assertDoesNotThrow(() -> attachedPhotoRepository.saveAll(Collections.emptyList()));
         flushAndClear();
+    }
+
+    @DisplayName("리뷰 ID로 사진 찾기 - 성공")
+    @Test
+    void review_findById_success() throws Exception {
+
+        // given
+        AttachedPhoto attachedPhoto1 = AttachedPhotoFixture.attachedPhoto();
+        entityManager.persist(attachedPhoto1);
+        flushAndClear();
+
+        // when, then
+        assertThat(attachedPhotoRepository.findByReviewId(attachedPhoto1.getReviewId()).size())
+                .isEqualTo(1);
     }
 }
