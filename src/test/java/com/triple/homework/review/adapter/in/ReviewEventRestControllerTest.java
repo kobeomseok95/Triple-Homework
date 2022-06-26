@@ -1,6 +1,8 @@
 package com.triple.homework.review.adapter.in;
 
 import com.triple.homework.common.exception.ClientErrorCode;
+import com.triple.homework.common.exception.review.ReviewErrorCode;
+import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequest;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequestBuilder;
 import com.triple.homework.support.RestControllerTestSupport;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,9 +50,28 @@ class ReviewEventRestControllerTest extends RestControllerTestSupport {
                 .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())));
     }
 
-    @DisplayName("리뷰 이벤트 - 성공")
+    @DisplayName("리뷰 이벤트 ADD - 실패 / 유저가 장소에 대해 이미 작성한 리뷰인 경우")
     @Test
-    void review_events_success() throws Exception {
+    void review_events_add_fail_exist_userId_and_placeId() throws Exception {
+
+        // given
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildAdd();
+        doThrow(new WrittenReviewByUserAndPlaceException())
+                .when(reviewEventDelegator)
+                .handle(any());
+
+        // when, then
+        mockMvc.perform(post("/events")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code", is(ReviewErrorCode.WRITTEN_REVIEW.getCode())))
+                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())));
+    }
+
+    @DisplayName("리뷰 이벤트 ADD - 성공")
+    @Test
+    void review_events_add_success() throws Exception {
 
         // given
         ReviewEventRequest request = ReviewEventRequestBuilder.buildAdd();
