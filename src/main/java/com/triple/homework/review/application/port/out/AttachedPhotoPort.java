@@ -7,4 +7,6 @@ import java.util.List;
 public interface AttachedPhotoPort {
 
     List<AttachedPhoto> saveAll(Iterable<AttachedPhoto> attachedPhotos);
+
+    List<AttachedPhoto> findByReviewId(String reviewId);
 }

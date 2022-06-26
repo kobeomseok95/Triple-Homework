@@ -17,4 +17,10 @@ class AttachedPhotoRepository implements AttachedPhotoPort {
     public List<AttachedPhoto> saveAll(Iterable<AttachedPhoto> attachedPhotos) {
         return attachedPhotoJpaRepository.saveAll(attachedPhotos);
     }
+
+    @Override
+    public List<AttachedPhoto> findByReviewId(String reviewId) {
+        // TODO: 2022/06/26 kobeomseok95 implements
+        return null;
+    }
 }

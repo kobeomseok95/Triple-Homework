@@ -5,6 +5,8 @@ import com.triple.homework.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 class ReviewRepository implements ReviewPort {
@@ -24,5 +26,11 @@ class ReviewRepository implements ReviewPort {
     @Override
     public boolean existsByPlaceId(String placeId) {
         return reviewJpaRepository.existsByPlaceId(placeId);
+    }
+
+    @Override
+    public Optional<Review> findById(String reviewId) {
+        // TODO: 2022/06/26 kobeomseok95 implements
+        return Optional.empty();
     }
 }

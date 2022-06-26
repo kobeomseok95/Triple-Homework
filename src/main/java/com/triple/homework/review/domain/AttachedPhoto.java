@@ -41,4 +41,8 @@ public class AttachedPhoto extends BaseEntity {
                 .isDeleted(false)
                 .build();
     }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

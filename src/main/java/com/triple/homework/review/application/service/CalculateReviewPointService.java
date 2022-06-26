@@ -2,6 +2,8 @@ package com.triple.homework.review.application.service;
 
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
+import com.triple.homework.review.domain.AttachedPhoto;
+import com.triple.homework.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,5 +42,12 @@ class CalculateReviewPointService {
 
     private boolean isFirstReview(String placeId) {
         return !reviewPort.existsByPlaceId(placeId);
+    }
+
+    public Long calculatePoint(Review review,
+                               List<AttachedPhoto> attachedPhotos,
+                               ReviewEventRequestDto reviewEventRequestDto) {
+        // TODO: 2022/06/26 kobeomseok95 implements
+        return null;
     }
 }

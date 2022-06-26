@@ -37,4 +37,8 @@ public class Review extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "TINYINT")
     private boolean isDeleted;
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }
