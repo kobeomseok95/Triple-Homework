@@ -15,4 +15,13 @@ public class ReviewFixture {
                 .isDeleted(false)
                 .build();
     }
+
+    public static Review haveNotContents() {
+        return Review.builder()
+                .id(UUID.randomUUID().toString())
+                .placeId(UUID.randomUUID().toString())
+                .userId(UUID.randomUUID().toString())
+                .isDeleted(false)
+                .build();
+    }
 }

@@ -52,9 +52,14 @@ class CalculateReviewPointService {
         Long point = 0L;
         if (modifyContentsLengthIsZero(review.getContent(), reviewEventRequestDto.getContent())) {
             point -= 1L;
+        } else if (modifyContentsLengthIsNotZero(review.getContent(), reviewEventRequestDto.getContent())) {
+            point += 1L;
         }
+
         if (modifyPhotosSizeIsZero(attachedPhotos, reviewEventRequestDto.getAttachedPhotoIds())) {
             point -= 1L;
+        } else if (modifyPhotosSizeIsNotZero(attachedPhotos, reviewEventRequestDto.getAttachedPhotoIds())) {
+            point += 1L;
         }
         return point;
     }
@@ -63,9 +68,19 @@ class CalculateReviewPointService {
         return contentGreaterThanOrEqualOne(source) && !contentGreaterThanOrEqualOne(target);
     }
 
+    private boolean modifyContentsLengthIsNotZero(String source, String target) {
+        return !contentGreaterThanOrEqualOne(source) && contentGreaterThanOrEqualOne(target);
+    }
+
     private boolean modifyPhotosSizeIsZero(List<AttachedPhoto> sources, List<String> targets) {
         return photosGreaterThanOrEqualOne(sources.stream()
                 .map(AttachedPhoto::getId)
                 .collect(Collectors.toList())) && !photosGreaterThanOrEqualOne(targets);
+    }
+
+    private boolean modifyPhotosSizeIsNotZero(List<AttachedPhoto> sources, List<String> targets) {
+        return !photosGreaterThanOrEqualOne(sources.stream()
+                .map(AttachedPhoto::getId)
+                .collect(Collectors.toList())) && photosGreaterThanOrEqualOne(targets);
     }
 }
