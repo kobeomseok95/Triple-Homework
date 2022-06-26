@@ -30,7 +30,6 @@ class ReviewRepository implements ReviewPort {
 
     @Override
     public Optional<Review> findById(String reviewId) {
-        // TODO: 2022/06/26 kobeomseok95 implements
-        return Optional.empty();
+        return reviewJpaRepository.findById(reviewId);
     }
 }
