@@ -26,13 +26,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AddReviewEventServiceTest {
 
-    @Mock
-    ReviewPort reviewPort;
+    @Mock ReviewPort reviewPort;
     @Mock CalculateReviewPointService calculateReviewPointService;
-    @Mock
-    ReviewToUserPort userRepository;
-    @Mock
-    AttachedPhotoPort attachedPhotoPort;
+    @Mock ReviewToUserPort userRepository;
+    @Mock AttachedPhotoPort attachedPhotoPort;
     @InjectMocks AddReviewEventService addReviewEventService;
 
     @DisplayName("ADD 이벤트 실패 - 유저가 이미 장소에 대한 리뷰가 있는 경우")

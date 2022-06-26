@@ -29,10 +29,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
 
     @Override
     public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
-        // TODO: 2022/06/25 kobeomseok95 Validator 계층으로 분리
-        if (reviewPort.existsByUserIdAndPlaceId(reviewEventRequestDto.getUserId(), reviewEventRequestDto.getPlaceId())) {
-            throw new WrittenReviewByUserAndPlaceException();
-        }
+        validateExistReview(reviewEventRequestDto);
         Long point = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
         userRepository.findById(reviewEventRequestDto.getUserId())
                 .ifPresentOrElse(
@@ -41,5 +38,11 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
         reviewPort.save(reviewEventRequestDto.toReview());
         attachedPhotoPort.saveAll(AttachedPhoto.from(reviewEventRequestDto.getReviewId(),
                 reviewEventRequestDto.getAttachedPhotoIds()));
+    }
+
+    private void validateExistReview(ReviewEventRequestDto reviewEventRequestDto) {
+        if (reviewPort.existsByUserIdAndPlaceId(reviewEventRequestDto.getUserId(), reviewEventRequestDto.getPlaceId())) {
+            throw new WrittenReviewByUserAndPlaceException();
+        }
     }
 }
