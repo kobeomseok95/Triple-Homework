@@ -1,10 +1,10 @@
-package com.triple.homework.review.application.port.out;
+package com.triple.homework.user.application.port.out;
 
 import com.triple.homework.user.domain.User;
 
 import java.util.Optional;
 
-public interface ReviewToUserPort {
+public interface UserPort {
 
     Optional<User> findById(String userId);
 

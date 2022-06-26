@@ -5,7 +5,7 @@ import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.out.AttachedPhotoPort;
 import com.triple.homework.review.application.port.out.ReviewPort;
-import com.triple.homework.review.application.port.out.ReviewToUserPort;
+import com.triple.homework.user.application.port.out.UserPort;
 import com.triple.homework.review.domain.AttachedPhoto;
 import com.triple.homework.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
 
     private final ReviewPort reviewPort;
     private final CalculateReviewPointService calculateReviewPointService;
-    private final ReviewToUserPort userRepository;
+    private final UserPort userRepository;
     private final AttachedPhotoPort attachedPhotoPort;
 
     @Override

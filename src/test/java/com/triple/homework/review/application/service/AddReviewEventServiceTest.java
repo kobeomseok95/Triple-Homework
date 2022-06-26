@@ -6,7 +6,7 @@ import com.triple.homework.review.application.port.in.request.ReviewEventRequest
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
 import com.triple.homework.review.application.port.out.AttachedPhotoPort;
 import com.triple.homework.review.application.port.out.ReviewPort;
-import com.triple.homework.review.application.port.out.ReviewToUserPort;
+import com.triple.homework.user.application.port.out.UserPort;
 import com.triple.homework.review.domain.Review;
 import com.triple.homework.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ class AddReviewEventServiceTest {
 
     @Mock ReviewPort reviewPort;
     @Mock CalculateReviewPointService calculateReviewPointService;
-    @Mock ReviewToUserPort userRepository;
+    @Mock UserPort userPort;
     @Mock AttachedPhotoPort attachedPhotoPort;
     @InjectMocks AddReviewEventService addReviewEventService;
 
@@ -56,7 +56,7 @@ class AddReviewEventServiceTest {
                 .thenReturn(false);
         when(calculateReviewPointService.calculatePoint(requestDto))
                 .thenReturn(3L);
-        when(userRepository.findById(any()))
+        when(userPort.findById(any()))
                 .thenReturn(Optional.empty());
 
         // when
@@ -66,8 +66,8 @@ class AddReviewEventServiceTest {
         assertAll(
                 () -> verify(reviewPort).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
-                () -> verify(userRepository).findById(requestDto.getUserId()),
-                () -> verify(userRepository).save(any(User.class)),
+                () -> verify(userPort).findById(requestDto.getUserId()),
+                () -> verify(userPort).save(any(User.class)),
                 () -> verify(reviewPort).save(any(Review.class)),
                 () -> verify(attachedPhotoPort).saveAll(any(List.class))
         );
@@ -83,7 +83,7 @@ class AddReviewEventServiceTest {
                 .thenReturn(false);
         when(calculateReviewPointService.calculatePoint(requestDto))
                 .thenReturn(3L);
-        when(userRepository.findById(any()))
+        when(userPort.findById(any()))
                 .thenReturn(Optional.of(UserFixture.user()));
 
         // when
@@ -93,8 +93,8 @@ class AddReviewEventServiceTest {
         assertAll(
                 () -> verify(reviewPort).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
-                () -> verify(userRepository).findById(requestDto.getUserId()),
-                () -> verify(userRepository, times(0)).save(any(User.class)),
+                () -> verify(userPort).findById(requestDto.getUserId()),
+                () -> verify(userPort, times(0)).save(any(User.class)),
                 () -> verify(reviewPort).save(any(Review.class)),
                 () -> verify(attachedPhotoPort).saveAll(any(List.class))
         );
