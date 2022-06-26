@@ -1,9 +1,14 @@
 package com.triple.homework.review.application.service;
 
+import com.triple.homework.fixture.AttachedPhotoFixture;
+import com.triple.homework.fixture.ReviewFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
 import com.triple.homework.review.application.port.out.ReviewPort;
+import com.triple.homework.review.domain.AttachedPhoto;
+import com.triple.homework.review.domain.Review;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -12,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +47,7 @@ class CalculateReviewPointServiceTest {
 
     private static Stream<Arguments> reviewEventsRequestDtos() {
         return Stream.of(
-                Arguments.of(ReviewEventRequestDtoBuilder.buildNoContent(), 0L),
+                Arguments.of(ReviewEventRequestDtoBuilder.buildNoContentAndPhotos(), 0L),
                 Arguments.of(ReviewEventRequestDtoBuilder.buildHaveText(), 1L),
                 Arguments.of(ReviewEventRequestDtoBuilder.buildHavePhoto(), 1L),
                 Arguments.of(ReviewEventRequestDtoBuilder.build(), 2L)
@@ -60,5 +66,19 @@ class CalculateReviewPointServiceTest {
         // when, then
         assertThat(calculateReviewPointService.calculatePoint(requestDto))
                 .isEqualTo(expectedPoint + 1L);
+    }
+
+    @DisplayName("점수 계산 테스트 - 수정한 리뷰가 내용이 없고, 사진이 없다면 -2점 반환")
+    @Test
+    void calculate_point_success_different_contents_and_photos() throws Exception {
+
+        // given
+        Review review = ReviewFixture.review();
+        List<AttachedPhoto> attachedPhotos = List.of(AttachedPhotoFixture.attachedPhoto());
+        ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.buildNoContentAndPhotos();
+
+        // when, then
+        assertThat(calculateReviewPointService.calculatePoint(review, attachedPhotos, requestDto))
+                .isEqualTo(-2L);
     }
 }

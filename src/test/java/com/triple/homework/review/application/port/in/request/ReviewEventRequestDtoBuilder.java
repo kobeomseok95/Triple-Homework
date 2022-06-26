@@ -18,7 +18,7 @@ public class ReviewEventRequestDtoBuilder {
                 .build();
     }
 
-    public static ReviewEventRequestDto buildNoContent() {
+    public static ReviewEventRequestDto buildNoContentAndPhotos() {
         return ReviewEventRequestDto.builder()
                 .reviewId(UUID.randomUUID().toString())
                 .userId(UUID.randomUUID().toString())

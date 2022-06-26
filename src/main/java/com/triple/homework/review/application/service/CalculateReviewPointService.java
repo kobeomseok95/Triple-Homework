@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +48,24 @@ class CalculateReviewPointService {
     public Long calculatePoint(Review review,
                                List<AttachedPhoto> attachedPhotos,
                                ReviewEventRequestDto reviewEventRequestDto) {
-        // TODO: 2022/06/26 kobeomseok95 implements
-        return null;
+
+        Long point = 0L;
+        if (modifyContentsLengthIsZero(review.getContent(), reviewEventRequestDto.getContent())) {
+            point -= 1L;
+        }
+        if (modifyPhotosSizeIsZero(attachedPhotos, reviewEventRequestDto.getAttachedPhotoIds())) {
+            point -= 1L;
+        }
+        return point;
+    }
+
+    private boolean modifyContentsLengthIsZero(String source, String target) {
+        return contentGreaterThanOrEqualOne(source) && !contentGreaterThanOrEqualOne(target);
+    }
+
+    private boolean modifyPhotosSizeIsZero(List<AttachedPhoto> sources, List<String> targets) {
+        return photosGreaterThanOrEqualOne(sources.stream()
+                .map(AttachedPhoto::getId)
+                .collect(Collectors.toList())) && !photosGreaterThanOrEqualOne(targets);
     }
 }
