@@ -37,4 +37,8 @@ public class AttachedPhotos {
         attachedPhotos.clear();
         add(review, newAttachedPhotoIds);
     }
+
+    public boolean isEmpty() {
+        return attachedPhotos.isEmpty();
+    }
 }

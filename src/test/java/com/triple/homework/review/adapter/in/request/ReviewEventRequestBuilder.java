@@ -50,7 +50,7 @@ public class ReviewEventRequestBuilder {
                 .action("MOD")
                 .reviewId("240a0658-dc5f-4878-9381-ebb7b2667772")
                 .userId("3ede0ef2-92b7-4817-a5f3-0c575361f745")
-                .placeId("c7e00bf4-8d96-4f96-af03-288cfb204ceb")
+                .placeId("2e4baf1c-5acb-4efb-a1af-eddada31b00f")
                 .build();
     }
 

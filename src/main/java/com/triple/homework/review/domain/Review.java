@@ -1,11 +1,13 @@
 package com.triple.homework.review.domain;
 
 import com.triple.homework.common.entity.BaseEntity;
+import com.triple.homework.common.exception.review.PlaceIdIsDifferentException;
 import com.triple.homework.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -47,15 +49,37 @@ public class Review extends BaseEntity {
         attachedPhotos.add(this, attachedPhotoIds);
     }
 
-    public void modify(Long calculatedPoint,
-                       String content,
+    public void modify(String content,
                        String placeId,
                        List<String> attachedPhotoIds) {
+        checkPlaceId(placeId);
+        compareContentAttachedPhotosAndChangeUserPoints(content, attachedPhotoIds);
         this.content = content;
-        this.placeId = placeId;
         attachedPhotos.put(this, attachedPhotoIds);
-        user.calculate(calculatedPoint - this.reviewPoints);
-        this.reviewPoints = calculatedPoint;
+    }
+
+    private void checkPlaceId(String placeId) {
+        if (!this.placeId.equals(placeId)) {
+            throw new PlaceIdIsDifferentException();
+        }
+    }
+
+    private void compareContentAttachedPhotosAndChangeUserPoints(String content, List<String> attachedPhotoIds) {
+        Long changePoint = 0L;
+        if (StringUtils.hasText(this.content) && !StringUtils.hasText(content)) {
+            changePoint -= 1L;
+        } else if (!StringUtils.hasText(this.content) && StringUtils.hasText(content)) {
+            changePoint += 1L;
+        }
+
+        if (!this.attachedPhotos.isEmpty() && attachedPhotoIds.isEmpty()) {
+            changePoint -= 1L;
+        } else if(this.attachedPhotos.isEmpty() && !attachedPhotoIds.isEmpty()) {
+            changePoint += 1L;
+        }
+
+        user.calculate(changePoint);
+        reviewPoints += changePoint;
     }
 
     public void decreaseUsersPointAndReturnReviewPoint() {
