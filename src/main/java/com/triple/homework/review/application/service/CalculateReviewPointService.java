@@ -16,7 +16,7 @@ class CalculateReviewPointService {
 
     private final ReviewPort reviewPort;
 
-    public Long calculatePointForAddReview(ReviewEventRequestDto requestDto) {
+    public Long calculatePoint(ReviewEventRequestDto requestDto) {
         Long point = 0L;
         if (contentGreaterThanOrEqualOne(requestDto.getContent())) {
             point += 1L;

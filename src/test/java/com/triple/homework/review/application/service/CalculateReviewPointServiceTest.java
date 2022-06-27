@@ -35,7 +35,7 @@ class CalculateReviewPointServiceTest {
                 .thenReturn(true);
 
         // when, then
-        assertThat(calculateReviewPointService.calculatePointForAddReview(requestDto))
+        assertThat(calculateReviewPointService.calculatePoint(requestDto))
                 .isEqualTo(expectedPoint);
     }
 
@@ -58,7 +58,7 @@ class CalculateReviewPointServiceTest {
                 .thenReturn(false);
 
         // when, then
-        assertThat(calculateReviewPointService.calculatePointForAddReview(requestDto))
+        assertThat(calculateReviewPointService.calculatePoint(requestDto))
                 .isEqualTo(expectedPoint + 1L);
     }
 }
