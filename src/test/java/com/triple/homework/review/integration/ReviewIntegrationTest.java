@@ -4,8 +4,10 @@ import com.triple.homework.common.exception.ClientErrorCode;
 import com.triple.homework.common.exception.review.ReviewErrorCode;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequest;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequestBuilder;
-import com.triple.homework.user.application.port.out.UserPort;
+import com.triple.homework.review.application.port.out.ReviewPort;
+import com.triple.homework.review.domain.Review;
 import com.triple.homework.support.IntegrationTest;
+import com.triple.homework.user.application.port.out.UserPort;
 import com.triple.homework.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,8 @@ import org.springframework.test.context.jdbc.Sql;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ReviewIntegrationTest extends IntegrationTest {
 
     @Autowired UserPort userPort;
+    @Autowired ReviewPort reviewPort;
 
     @DisplayName("이벤트 받기 - 유효하지 않은 입력값이 주어진 경우")
     @Test
@@ -53,7 +58,7 @@ public class ReviewIntegrationTest extends IntegrationTest {
                 .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())));
     }
 
-    @Sql("classpath:add-review-test.sql")
+    @Sql("classpath:review-test.sql")
     @DisplayName("리뷰 이벤트 ADD - 실패 / 유저가 장소에 대해 이미 작성한 리뷰인 경우")
     @Test
     void review_events_add_fail_exist_userId_and_placeId() throws Exception {
@@ -86,5 +91,29 @@ public class ReviewIntegrationTest extends IntegrationTest {
 
         User user = userPort.findById(request.getUserId()).get();
         assertThat(user.getUserPoints()).isEqualTo(3L);
+    }
+
+    @Sql("classpath:review-test.sql")
+    @DisplayName("리뷰 이벤트 MOD - 성공 / 첫 리뷰지만 컨텐츠, 사진을 첨부하지 않은 경우 2점 감소")
+    @Test
+    void review_events_mod_success() throws Exception {
+
+        // given
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildModifyHaveNotContentAttachedPhotoIds();
+
+        // when, then
+        mockMvc.perform(post("/events")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        flushAndClear();
+
+        Review review = reviewPort.findByIdWithUserAttachedPhotos(request.getReviewId()).get();
+        User user = review.getUser();
+        assertAll(
+                () -> assertEquals(1, user.getUserPoints()),
+                () -> assertEquals(0, review.getAttachedPhotos().getAttachedPhotos().size()),
+                () -> assertEquals(1, review.getReviewPoints())
+        );
     }
 }
