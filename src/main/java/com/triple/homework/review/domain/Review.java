@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +28,9 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
+    @Embedded
+    private AttachedPhotos attachedPhotos;
+
     @Column(length = 36, nullable = false, name = "PLACE_ID")
     private String placeId;
 
@@ -35,5 +39,12 @@ public class Review extends BaseEntity {
 
     public void changeContent(String content) {
         this.content = content;
+    }
+
+    public void addAttachedPhotos(List<String> attachedPhotoIds) {
+        if (attachedPhotos == null) {
+            attachedPhotos = new AttachedPhotos();
+        }
+        attachedPhotos.add(this, attachedPhotoIds);
     }
 }

@@ -3,11 +3,7 @@ package com.triple.homework.review.domain;
 import com.triple.homework.common.entity.BaseEntity;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -20,19 +16,14 @@ public class AttachedPhoto extends BaseEntity {
     @Column(name = "ATTACHED_PHOTO_ID", length = 36)
     private String id;
 
-    @Column(nullable = false)
-    private String reviewId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REVIEW_ID", nullable = false)
+    private Review review;
 
-    public static List<AttachedPhoto> from(String reviewId, List<String> attachedPhotoIds) {
-        return attachedPhotoIds.stream()
-                .map(attachedPhotoId -> from(reviewId, attachedPhotoId))
-                .collect(Collectors.toList());
-    }
-
-    private static AttachedPhoto from(String reviewId, String attachedPhotoId) {
+    public static AttachedPhoto from(Review review, String attachedPhotoId) {
         return AttachedPhoto.builder()
                 .id(attachedPhotoId)
-                .reviewId(reviewId)
+                .review(review)
                 .build();
     }
 }

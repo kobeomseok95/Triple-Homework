@@ -4,10 +4,9 @@ import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceEx
 import com.triple.homework.fixture.UserFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
-import com.triple.homework.review.application.port.out.AttachedPhotoPort;
 import com.triple.homework.review.application.port.out.ReviewPort;
-import com.triple.homework.user.application.port.out.UserPort;
 import com.triple.homework.review.domain.Review;
+import com.triple.homework.user.application.port.out.UserPort;
 import com.triple.homework.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,7 +27,6 @@ class AddReviewEventServiceTest {
     @Mock ReviewPort reviewPort;
     @Mock CalculateReviewPointService calculateReviewPointService;
     @Mock UserPort userPort;
-    @Mock AttachedPhotoPort attachedPhotoPort;
     @InjectMocks AddReviewEventService addReviewEventService;
 
     @DisplayName("ADD 이벤트 실패 - 유저가 이미 장소에 대한 리뷰가 있는 경우")
@@ -58,6 +55,8 @@ class AddReviewEventServiceTest {
                 .thenReturn(3L);
         when(userPort.findById(any()))
                 .thenReturn(Optional.empty());
+        when(reviewPort.save(any()))
+                .thenReturn(mock(Review.class));
 
         // when
         addReviewEventService.handleEvent(requestDto);
@@ -68,8 +67,7 @@ class AddReviewEventServiceTest {
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userPort).findById(requestDto.getUserId()),
                 () -> verify(userPort).save(any(User.class)),
-                () -> verify(reviewPort).save(any(Review.class)),
-                () -> verify(attachedPhotoPort).saveAll(any(List.class))
+                () -> verify(reviewPort).save(any(Review.class))
         );
     }
 
@@ -85,6 +83,8 @@ class AddReviewEventServiceTest {
                 .thenReturn(3L);
         when(userPort.findById(any()))
                 .thenReturn(Optional.of(UserFixture.user()));
+        when(reviewPort.save(any()))
+                .thenReturn(mock(Review.class));
 
         // when
         addReviewEventService.handleEvent(requestDto);
@@ -95,8 +95,7 @@ class AddReviewEventServiceTest {
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userPort).findById(requestDto.getUserId()),
                 () -> verify(userPort, times(0)).save(any(User.class)),
-                () -> verify(reviewPort).save(any(Review.class)),
-                () -> verify(attachedPhotoPort).saveAll(any(List.class))
+                () -> verify(reviewPort).save(any(Review.class))
         );
     }
 }

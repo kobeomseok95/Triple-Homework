@@ -3,9 +3,8 @@ package com.triple.homework.review.application.service;
 import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
-import com.triple.homework.review.application.port.out.AttachedPhotoPort;
 import com.triple.homework.review.application.port.out.ReviewPort;
-import com.triple.homework.review.domain.AttachedPhoto;
+import com.triple.homework.review.domain.Review;
 import com.triple.homework.user.application.port.out.UserPort;
 import com.triple.homework.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
     private final ReviewPort reviewPort;
     private final CalculateReviewPointService calculateReviewPointService;
     private final UserPort userPort;
-    private final AttachedPhotoPort attachedPhotoPort;
 
     @Override
     public String getCode() {
@@ -34,9 +32,8 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
         validateExistReview(reviewEventRequestDto);
         Long point = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
         User user = findOrSave(reviewEventRequestDto.getUserId(), point);
-        reviewPort.save(reviewEventRequestDto.toReview(user));
-        attachedPhotoPort.saveAll(AttachedPhoto.from(reviewEventRequestDto.getReviewId(),
-                reviewEventRequestDto.getAttachedPhotoIds()));
+        Review review = reviewPort.save(reviewEventRequestDto.toReview(user));
+        review.addAttachedPhotos(reviewEventRequestDto.getAttachedPhotoIds());
     }
 
     private void validateExistReview(ReviewEventRequestDto reviewEventRequestDto) {

@@ -9,7 +9,7 @@ public class AttachedPhotoFixture {
     public static AttachedPhoto attachedPhoto() {
         return AttachedPhoto.builder()
                 .id(UUID.randomUUID().toString())
-                .reviewId(UUID.randomUUID().toString())
+                .review(ReviewFixture.review())
                 .build();
     }
 }

@@ -26,8 +26,8 @@ public class ReviewEventRequestDto {
     public Review toReview(User user) {
         return Review.builder()
                 .id(reviewId)
-                .content(content)
                 .user(user)
+                .content(content)
                 .placeId(placeId)
                 .build();
     }
