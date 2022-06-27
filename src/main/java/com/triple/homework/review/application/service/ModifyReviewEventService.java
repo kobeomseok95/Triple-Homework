@@ -42,7 +42,7 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
 
         review.changeContent(reviewEventRequestDto.getContent());
         user.calculate(differencePoint);
-        attachedPhotos.forEach(AttachedPhoto::delete);
+        // TODO: 2022/06/27 kobeomseok95 delete before attachedPhotos
         attachedPhotoPort.saveAll(AttachedPhoto.from(reviewEventRequestDto.getReviewId(),
                 reviewEventRequestDto.getAttachedPhotoIds()));
     }

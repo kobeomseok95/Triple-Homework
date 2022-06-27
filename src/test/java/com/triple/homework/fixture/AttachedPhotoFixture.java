@@ -10,7 +10,6 @@ public class AttachedPhotoFixture {
         return AttachedPhoto.builder()
                 .id(UUID.randomUUID().toString())
                 .reviewId(UUID.randomUUID().toString())
-                .isDeleted(false)
                 .build();
     }
 }

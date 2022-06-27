@@ -101,8 +101,7 @@ class ModifyReviewEventServiceTest {
                 () -> verify(attachedPhotoPort).saveAll(any(List.class)),
                 () -> verify(calculateReviewPointService).calculatePoint(review, attachedPhotos, requestDto),
                 () -> assertThat(user.getPointScore()).isEqualTo(beforePointScore + afterPointScore),
-                () -> assertThat(review.getContent()).isEqualTo(requestDto.getContent()),
-                () -> assertThat(attachedPhotos).allMatch(AttachedPhoto::isDeleted)
+                () -> assertThat(review.getContent()).isEqualTo(requestDto.getContent())
         );
     }
 }
