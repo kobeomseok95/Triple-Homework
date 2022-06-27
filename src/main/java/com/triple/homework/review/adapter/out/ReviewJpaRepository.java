@@ -17,7 +17,7 @@ interface ReviewJpaRepository extends JpaRepository<Review, String> {
             "select distinct r " +
             "from Review r " +
             "join fetch r.user " +
-            "join fetch r.attachedPhotos.attachedPhotos a " +
+            "left join fetch r.attachedPhotos.attachedPhotos a " +
             "where r.id = :reviewId"
     )
     Optional<Review> findByIdWithUserAttachedPhotos(@Param("reviewId") String reviewId);

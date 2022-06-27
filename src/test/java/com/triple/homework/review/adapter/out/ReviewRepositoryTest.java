@@ -73,9 +73,9 @@ class ReviewRepositoryTest extends JpaRepositoryTest {
                 .isFalse();
     }
 
-    @DisplayName("리뷰 ID로 user, attachedphotos fetch join 조회 - 성공")
+    @DisplayName("리뷰 ID로 user, attachedphotos fetch join 조회 - 성공 / 사진이 있을 경우")
     @Test
-    void findByIdWithUserAttachedPhotos_success() throws Exception {
+    void findByIdWithUserAttachedPhotos_success_exist_attachedPhotos() throws Exception {
 
         // given
         Review review = ReviewFixture.review();
@@ -94,6 +94,26 @@ class ReviewRepositoryTest extends JpaRepositoryTest {
         assertAll(
                 () -> assertEquals(findReview.getUser().getId(), review.getUser().getId()),
                 () -> assertEquals(findReview.getAttachedPhotos().getAttachedPhotos().size(), 2)
+        );
+    }
+
+    @DisplayName("리뷰 ID로 user, attachedphotos fetch join 조회 - 성공 / 사진이 없을 경우")
+    @Test
+    void findByIdWithUserAttachedPhotos_success_not_exist_attachedPhotos() throws Exception {
+
+        // given
+        Review review = ReviewFixture.review();
+        entityManager.persist(review.getUser());
+        entityManager.persist(review);
+        flushAndClear();
+
+        // when
+        Review findReview = reviewRepository.findByIdWithUserAttachedPhotos(review.getId()).get();
+
+        // then
+        assertAll(
+                () -> assertEquals(findReview.getUser().getId(), review.getUser().getId()),
+                () -> assertEquals(findReview.getAttachedPhotos().getAttachedPhotos().size(), 0)
         );
     }
 }
