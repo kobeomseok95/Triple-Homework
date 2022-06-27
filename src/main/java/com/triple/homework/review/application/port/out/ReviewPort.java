@@ -12,5 +12,5 @@ public interface ReviewPort {
 
     boolean existsByPlaceId(String placeId);
 
-    Optional<Review> findById(String reviewId);
+    Optional<Review> findByIdWithUserAttachedPhotos(String reviewId);
 }

@@ -29,7 +29,7 @@ class ReviewRepository implements ReviewPort {
     }
 
     @Override
-    public Optional<Review> findById(String reviewId) {
-        return reviewJpaRepository.findById(reviewId);
+    public Optional<Review> findByIdWithUserAttachedPhotos(String reviewId) {
+        return reviewJpaRepository.findByIdWithUserAttachedPhotos(reviewId);
     }
 }

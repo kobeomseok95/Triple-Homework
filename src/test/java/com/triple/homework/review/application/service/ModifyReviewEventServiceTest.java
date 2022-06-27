@@ -7,7 +7,6 @@ import com.triple.homework.fixture.ReviewFixture;
 import com.triple.homework.fixture.UserFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
-import com.triple.homework.review.application.port.out.AttachedPhotoPort;
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.AttachedPhoto;
 import com.triple.homework.review.domain.Review;
@@ -35,7 +34,6 @@ class ModifyReviewEventServiceTest {
 
     @Mock ReviewPort reviewPort;
     @Mock UserPort userPort;
-    @Mock AttachedPhotoPort attachedPhotoPort;
     @Mock CalculateReviewPointService calculateReviewPointService;
     @InjectMocks ModifyReviewEventService modifyReviewEventService;
 
@@ -45,7 +43,7 @@ class ModifyReviewEventServiceTest {
 
         // given
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
-        when(reviewPort.findById(any()))
+        when(reviewPort.findByIdWithUserAttachedPhotos(any()))
                 .thenReturn(Optional.empty());
 
         // when, then
@@ -60,7 +58,7 @@ class ModifyReviewEventServiceTest {
         // given
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
         Review review = ReviewFixture.review();
-        when(reviewPort.findById(any()))
+        when(reviewPort.findByIdWithUserAttachedPhotos(any()))
                 .thenReturn(Optional.of(review));
         when(userPort.findById(any()))
                 .thenReturn(Optional.empty());
@@ -77,15 +75,13 @@ class ModifyReviewEventServiceTest {
         // given
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.buildHaveText();
         Review review = ReviewFixture.review();
-        when(reviewPort.findById(any()))
+        when(reviewPort.findByIdWithUserAttachedPhotos(any()))
                 .thenReturn(Optional.of(review));
         User user = UserFixture.user();
         Long beforePointScore = user.getPointScore();
         when(userPort.findById(any()))
                 .thenReturn(Optional.of(user));
         List<AttachedPhoto> attachedPhotos = List.of(AttachedPhotoFixture.attachedPhoto());
-        when(attachedPhotoPort.findByReviewId(any()))
-                .thenReturn(attachedPhotos);
         long afterPointScore = 1L;
         when(calculateReviewPointService.calculatePoint(review, attachedPhotos, requestDto))
                 .thenReturn(afterPointScore);
@@ -95,10 +91,8 @@ class ModifyReviewEventServiceTest {
 
         // then
         assertAll(
-                () -> verify(reviewPort).findById(requestDto.getReviewId()),
+                () -> verify(reviewPort).findByIdWithUserAttachedPhotos(requestDto.getReviewId()),
                 () -> verify(userPort).findById(requestDto.getUserId()),
-                () -> verify(attachedPhotoPort).findByReviewId(requestDto.getReviewId()),
-                () -> verify(attachedPhotoPort).saveAll(any(List.class)),
                 () -> verify(calculateReviewPointService).calculatePoint(review, attachedPhotos, requestDto),
                 () -> assertThat(user.getPointScore()).isEqualTo(beforePointScore + afterPointScore),
                 () -> assertThat(review.getContent()).isEqualTo(requestDto.getContent())
