@@ -85,4 +85,23 @@ class ReviewTest {
                 Arguments.of(zeroPointsReview, haveThreePointsUser, 0L)
         );
     }
+
+    @DisplayName("리뷰 삭제 시 유저 포인트 차감 - 성공")
+    @Test
+    void decrease_user_point_success() throws Exception {
+
+        // given
+        Review review = ReviewFixture.review();
+        User user = review.getUser();
+        Long beforeUserPoints = user.getUserPoints();
+
+        // when
+        Long reviewPoint = review.decreaseUsersPointAndReturnReviewPoint();
+
+        // then
+        assertAll(
+                () -> assertEquals(review.getReviewPoints(), reviewPoint),
+                () -> assertEquals(user.getUserPoints(), beforeUserPoints - reviewPoint)
+        );
+    }
 }

@@ -59,6 +59,8 @@ public class Review extends BaseEntity {
         return user.getUserPoints();
     }
 
-    public void decreaseUsersPoint() {
+    public Long decreaseUsersPointAndReturnReviewPoint() {
+        user.calculate(-reviewPoints);
+        return reviewPoints;
     }
 }

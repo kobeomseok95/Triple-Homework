@@ -25,7 +25,7 @@ class DeleteReviewEventService implements ReviewEventHandleUseCase {
     public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
                 .orElseThrow(ReviewNotFoundException::new);
-        review.decreaseUsersPoint();
+        Long reviewPoint = review.decreaseUsersPointAndReturnReviewPoint();
         reviewPort.delete(review);
     }
 }
