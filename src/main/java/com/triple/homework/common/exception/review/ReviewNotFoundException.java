@@ -3,11 +3,11 @@ package com.triple.homework.common.exception.review;
 import com.triple.homework.common.exception.ApplicationException;
 import com.triple.homework.common.exception.ErrorEnumCode;
 
-public class NotWrittenReviewException extends ApplicationException {
+public class ReviewNotFoundException extends ApplicationException {
 
-    private static final ErrorEnumCode CODE = ReviewErrorCode.NOT_WRITTEN_REVIEW;
+    private static final ErrorEnumCode CODE = ReviewErrorCode.NOT_FOUND;
 
-    public NotWrittenReviewException() {
+    public ReviewNotFoundException() {
         super(CODE);
     }
 }

@@ -1,6 +1,6 @@
 package com.triple.homework.review.application.service;
 
-import com.triple.homework.common.exception.review.NotWrittenReviewException;
+import com.triple.homework.common.exception.review.ReviewNotFoundException;
 import com.triple.homework.fixture.ReviewFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
@@ -39,7 +39,7 @@ class ModifyReviewEventServiceTest {
 
         // when, then
         assertThatThrownBy(() -> modifyReviewEventService.handleEvent(requestDto))
-                .isInstanceOf(NotWrittenReviewException.class);
+                .isInstanceOf(ReviewNotFoundException.class);
     }
 
     @DisplayName("리뷰 수정 - 성공")

@@ -1,7 +1,7 @@
 package com.triple.homework.review.adapter.in;
 
 import com.triple.homework.common.exception.ClientErrorCode;
-import com.triple.homework.common.exception.review.NotWrittenReviewException;
+import com.triple.homework.common.exception.review.ReviewNotFoundException;
 import com.triple.homework.common.exception.review.ReviewErrorCode;
 import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequest;
@@ -91,7 +91,7 @@ class ReviewEventRestControllerTest extends RestControllerTestSupport {
 
         // given
         ReviewEventRequest request = ReviewEventRequestBuilder.buildModify();
-        doThrow(new NotWrittenReviewException())
+        doThrow(new ReviewNotFoundException())
                 .when(reviewEventDelegator)
                 .handle(any());
 
@@ -100,7 +100,7 @@ class ReviewEventRestControllerTest extends RestControllerTestSupport {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code", is(ReviewErrorCode.NOT_WRITTEN_REVIEW.getCode())))
+                .andExpect(jsonPath("$.code", is(ReviewErrorCode.NOT_FOUND.getCode())))
                 .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())));
     }
 
@@ -110,6 +110,40 @@ class ReviewEventRestControllerTest extends RestControllerTestSupport {
 
         // given
         ReviewEventRequest request = ReviewEventRequestBuilder.buildModify();
+
+        // when, then
+        mockMvc.perform(post("/events")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(reviewEventDelegator).handle(any(ReviewEventRequest.class));
+    }
+
+    @DisplayName("리뷰 이벤트 DELETE - 작성된 리뷰가 없는 경우")
+    @Test
+    void review_events_delete_fail_not_found_review() throws Exception {
+
+        // given
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildDelete();
+        doThrow(new ReviewNotFoundException())
+                .when(reviewEventDelegator)
+                .handle(any());
+
+        // when, then
+        mockMvc.perform(post("/events")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code", is(ReviewErrorCode.NOT_FOUND.getCode())))
+                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())));
+    }
+
+    @DisplayName("리뷰 이벤트 DELETE - 성공")
+    @Test
+    void review_events_delete_success() throws Exception {
+
+        // given
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildDelete();
 
         // when, then
         mockMvc.perform(post("/events")

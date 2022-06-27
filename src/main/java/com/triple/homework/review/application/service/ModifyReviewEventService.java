@@ -1,6 +1,6 @@
 package com.triple.homework.review.application.service;
 
-import com.triple.homework.common.exception.review.NotWrittenReviewException;
+import com.triple.homework.common.exception.review.ReviewNotFoundException;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
@@ -25,7 +25,7 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
     @Override
     public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
-                .orElseThrow(NotWrittenReviewException::new);
+                .orElseThrow(ReviewNotFoundException::new);
         Long calculatedPoint = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
         Long changedPoint = review.modifyReviewAndReturnChangeUserPoints(calculatedPoint,
                 reviewEventRequestDto.getContent(),
