@@ -2,11 +2,10 @@ package com.triple.homework.history.domain;
 
 
 import com.triple.homework.common.entity.BaseEntity;
+import com.triple.homework.user.domain.User;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -19,9 +18,10 @@ public class PointHistory extends BaseEntity {
     @Column(name = "POINT_HISTORY_ID", length = 36)
     private String id;
 
-    @Column(nullable = false)
-    private Long point;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
 
     @Column(nullable = false)
-    private String userId;
+    private Long point;
 }
