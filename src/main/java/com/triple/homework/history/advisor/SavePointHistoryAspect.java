@@ -18,6 +18,8 @@ class SavePointHistoryAspect {
     @AfterReturning(value = "@annotation(com.triple.homework.history.advisor.SavePointHistory)",
             returning = "userPointHistoryResponseDto")
     public void savePointHistory(JoinPoint joinPoint, UserPointHistoryResponseDto userPointHistoryResponseDto) {
-        pointHistoryPort.save(userPointHistoryResponseDto.toPointHistory());
+        if (userPointHistoryResponseDto.getChangedPoint() != 0) {
+            pointHistoryPort.save(userPointHistoryResponseDto.toPointHistory());
+        }
     }
 }
