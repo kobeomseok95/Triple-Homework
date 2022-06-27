@@ -26,11 +26,10 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
     public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
                 .orElseThrow(NotWrittenReviewException::new);
-        Long point = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
-        review.modify(point,
+        Long calculatedPoint = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
+        Long changedPoint = review.modifyReviewAndReturnChangeUserPoints(calculatedPoint,
                 reviewEventRequestDto.getContent(),
                 reviewEventRequestDto.getPlaceId(),
-                reviewEventRequestDto.getAttachedPhotoIds()
-        );
+                reviewEventRequestDto.getAttachedPhotoIds());
     }
 }

@@ -31,4 +31,10 @@ public class AttachedPhotos {
                 .map(photoIds -> AttachedPhoto.from(review, photoIds))
                 .collect(Collectors.toList()));
     }
+
+    public void put(Review review, List<String> newAttachedPhotoIds) {
+        attachedPhotos.forEach(AttachedPhoto::delete);
+        attachedPhotos.clear();
+        add(review, newAttachedPhotoIds);
+    }
 }

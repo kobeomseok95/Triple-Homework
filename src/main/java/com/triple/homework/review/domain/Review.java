@@ -47,10 +47,15 @@ public class Review extends BaseEntity {
         attachedPhotos.add(this, attachedPhotoIds);
     }
 
-    public void modify(Long point,
-                       String content,
-                       String placeId,
-                       List<String> attachedPhotoIds) {
-        // TODO: 2022/06/27 kobeomseok95 implement
+    public Long modifyReviewAndReturnChangeUserPoints(Long calculatedPoint,
+                                                      String content,
+                                                      String placeId,
+                                                      List<String> attachedPhotoIds) {
+        this.content = content;
+        this.placeId = placeId;
+        attachedPhotos.put(this, attachedPhotoIds);
+        user.calculate(calculatedPoint - this.reviewPoints);
+        this.reviewPoints = calculatedPoint;
+        return user.getUserPoints();
     }
 }

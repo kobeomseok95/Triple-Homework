@@ -26,4 +26,8 @@ public class AttachedPhoto extends BaseEntity {
                 .review(review)
                 .build();
     }
+
+    public void delete() {
+        this.review = null;
+    }
 }
