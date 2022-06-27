@@ -13,4 +13,6 @@ public interface ReviewPort {
     boolean existsByPlaceId(String placeId);
 
     Optional<Review> findByIdWithUserAttachedPhotos(String reviewId);
+
+    void delete(Review review);
 }

@@ -32,4 +32,9 @@ class ReviewRepository implements ReviewPort {
     public Optional<Review> findByIdWithUserAttachedPhotos(String reviewId) {
         return reviewJpaRepository.findByIdWithUserAttachedPhotos(reviewId);
     }
+
+    @Override
+    public void delete(Review review) {
+        // TODO: 2022/06/27 kobeomseok95 impl
+    }
 }
