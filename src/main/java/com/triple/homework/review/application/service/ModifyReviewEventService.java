@@ -23,7 +23,7 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
     }
 
     @Override
-    public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
+    public Long handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
                 .orElseThrow(ReviewNotFoundException::new);
         Long calculatedPoint = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
@@ -32,5 +32,6 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
                 reviewEventRequestDto.getContent(),
                 reviewEventRequestDto.getPlaceId(),
                 reviewEventRequestDto.getAttachedPhotoIds());
+        return null;
     }
 }

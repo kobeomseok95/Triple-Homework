@@ -22,10 +22,11 @@ class DeleteReviewEventService implements ReviewEventHandleUseCase {
     }
 
     @Override
-    public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
+    public Long handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
                 .orElseThrow(ReviewNotFoundException::new);
         Long reviewPoint = review.decreaseUsersPointAndReturnReviewPoint();
         reviewPort.delete(review);
+        return null;
     }
 }
