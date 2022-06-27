@@ -1,6 +1,7 @@
 package com.triple.homework.review.application.service;
 
 import com.triple.homework.common.exception.review.ReviewNotFoundException;
+import com.triple.homework.history.advisor.SavePointHistory;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.response.UserPointHistoryResponseDto;
@@ -24,6 +25,7 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
     }
 
     @Override
+    @SavePointHistory
     public UserPointHistoryResponseDto handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
                 .orElseThrow(ReviewNotFoundException::new);

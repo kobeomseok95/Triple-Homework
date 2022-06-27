@@ -1,6 +1,7 @@
 package com.triple.homework.review.application.service;
 
 import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
+import com.triple.homework.history.advisor.SavePointHistory;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.response.UserPointHistoryResponseDto;
@@ -29,6 +30,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
     }
 
     @Override
+    @SavePointHistory
     public UserPointHistoryResponseDto handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         validateExistReview(reviewEventRequestDto);
         Long point = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
