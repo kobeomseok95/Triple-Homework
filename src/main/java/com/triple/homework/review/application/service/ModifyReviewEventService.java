@@ -27,14 +27,11 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
     @Override
     @SavePointHistory
     public UserPointHistoryResponseDto handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
-        // TODO: 2022/06/28 kobeomseok95 calculateReviewPointService 의존하지 않기
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
                 .orElseThrow(ReviewNotFoundException::new);
-        Long beforePoint = review.getReviewPoints();
-        Long calculatedPoint = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
-        review.modify(reviewEventRequestDto.getContent(),
+        Long changePoint = review.modify(reviewEventRequestDto.getContent(),
                 reviewEventRequestDto.getPlaceId(),
                 reviewEventRequestDto.getAttachedPhotoIds());
-        return UserPointHistoryResponseDto.of(review.getUser(), beforePoint - calculatedPoint);
+        return UserPointHistoryResponseDto.of(review.getUser(), changePoint);
     }
 }

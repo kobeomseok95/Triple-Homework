@@ -15,7 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -50,24 +52,30 @@ class ModifyReviewEventServiceTest {
     void modify_review_success() throws Exception {
 
         // given
-        ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
         Review review = ReviewFixture.review();
-        Long beforeReviewPoints = review.getReviewPoints();
         User user = review.getUser();
+        ReviewEventRequestDto requestDto = ReviewEventRequestDto.builder()
+                .reviewId(review.getId())
+                .userId(user.getId())
+                .placeId(review.getPlaceId())
+                .content("테스트 컨텐츠")
+                .attachedPhotoIds(List.of(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString()
+                ))
+                .build();
+        Long beforeReviewPoints = review.getReviewPoints();
         when(reviewPort.findByIdWithUserAttachedPhotos(any()))
                 .thenReturn(Optional.of(review));
-        when(calculateReviewPointService.calculatePoint(any()))
-                .thenReturn(1L);
 
         // when
         UserPointHistoryResponseDto responseDto = modifyReviewEventService.handleEvent(requestDto);
 
         // then
         assertAll(
-                () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(reviewPort).findByIdWithUserAttachedPhotos(requestDto.getReviewId()),
                 () -> assertEquals(user.getId(), responseDto.getUser().getId()),
-                () -> assertEquals(beforeReviewPoints - 1L, responseDto.getChangedPoint())
+                () -> assertEquals(review.getReviewPoints() - beforeReviewPoints, responseDto.getChangedPoint())
         );
     }
 }

@@ -49,13 +49,14 @@ public class Review extends BaseEntity {
         attachedPhotos.add(this, attachedPhotoIds);
     }
 
-    public void modify(String content,
+    public Long modify(String content,
                        String placeId,
                        List<String> attachedPhotoIds) {
         checkPlaceId(placeId);
-        compareContentAttachedPhotosAndChangeUserPoints(content, attachedPhotoIds);
+        Long changePoint = compareContentAttachedPhotosAndChangeUserPoints(content, attachedPhotoIds);
         this.content = content;
         attachedPhotos.put(this, attachedPhotoIds);
+        return changePoint;
     }
 
     private void checkPlaceId(String placeId) {
@@ -64,7 +65,7 @@ public class Review extends BaseEntity {
         }
     }
 
-    private void compareContentAttachedPhotosAndChangeUserPoints(String content, List<String> attachedPhotoIds) {
+    private Long compareContentAttachedPhotosAndChangeUserPoints(String content, List<String> attachedPhotoIds) {
         Long changePoint = 0L;
         if (StringUtils.hasText(this.content) && !StringUtils.hasText(content)) {
             changePoint -= 1L;
@@ -80,6 +81,7 @@ public class Review extends BaseEntity {
 
         user.calculate(changePoint);
         reviewPoints += changePoint;
+        return changePoint;
     }
 
     public void decreaseUsersPointAndReturnReviewPoint() {
