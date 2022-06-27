@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -18,8 +16,6 @@ import javax.persistence.*;
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"userId", "placeId"})
 })
-@SQLDelete(sql = "UPDATE REVIEW SET IS_DELETED = true WHERE REVIEW_ID = ?")
-@Where(clause = "IS_DELETED=0")
 public class Review extends BaseEntity {
 
     @Id
@@ -34,9 +30,6 @@ public class Review extends BaseEntity {
 
     @Column(length = 1000)
     private String content;
-
-    @Column(nullable = false, columnDefinition = "TINYINT")
-    private boolean isDeleted;
 
     public void changeContent(String content) {
         this.content = content;

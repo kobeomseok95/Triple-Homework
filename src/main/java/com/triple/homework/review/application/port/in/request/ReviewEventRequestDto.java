@@ -28,7 +28,6 @@ public class ReviewEventRequestDto {
                 .content(content)
                 .userId(userId)
                 .placeId(placeId)
-                .isDeleted(false)
                 .build();
     }
 }
