@@ -1,6 +1,7 @@
 package com.triple.homework.review.application.port.in.request;
 
 import com.triple.homework.review.domain.Review;
+import com.triple.homework.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,11 +23,11 @@ public class ReviewEventRequestDto {
     private String userId;
     private String placeId;
 
-    public Review toReview() {
+    public Review toReview(User user) {
         return Review.builder()
                 .id(reviewId)
                 .content(content)
-                .userId(userId)
+                .user(user)
                 .placeId(placeId)
                 .build();
     }

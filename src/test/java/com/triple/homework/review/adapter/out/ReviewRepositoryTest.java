@@ -21,11 +21,12 @@ class ReviewRepositoryTest extends JpaRepositoryTest {
 
         // given
         Review review = ReviewFixture.review();
+        entityManager.persist(review.getUser());
         entityManager.persist(review);
         flushAndClear();
 
         // when, then
-        assertThat(reviewRepository.existsByUserIdAndPlaceId(review.getUserId(), review.getPlaceId()))
+        assertThat(reviewRepository.existsByUserIdAndPlaceId(review.getUser().getId(), review.getPlaceId()))
                 .isTrue();
     }
 
@@ -37,7 +38,7 @@ class ReviewRepositoryTest extends JpaRepositoryTest {
         Review review = ReviewFixture.review();
 
         // when, then
-        assertThat(reviewRepository.existsByUserIdAndPlaceId(review.getUserId(), review.getPlaceId()))
+        assertThat(reviewRepository.existsByUserIdAndPlaceId(review.getUser().getId(), review.getPlaceId()))
                 .isFalse();
     }
 
@@ -47,6 +48,7 @@ class ReviewRepositoryTest extends JpaRepositoryTest {
 
         // given
         Review review = ReviewFixture.review();
+        entityManager.persist(review.getUser());
         entityManager.persist(review);
         flushAndClear();
 

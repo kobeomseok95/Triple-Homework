@@ -9,8 +9,8 @@ public class ReviewFixture {
     public static Review review() {
         return Review.builder()
                 .id(UUID.randomUUID().toString())
+                .user(UserFixture.user())
                 .placeId(UUID.randomUUID().toString())
-                .userId(UUID.randomUUID().toString())
                 .content("테스트 컨텐츠")
                 .build();
     }
@@ -18,8 +18,8 @@ public class ReviewFixture {
     public static Review haveNotContents() {
         return Review.builder()
                 .id(UUID.randomUUID().toString())
+                .user(UserFixture.user())
                 .placeId(UUID.randomUUID().toString())
-                .userId(UUID.randomUUID().toString())
                 .build();
     }
 }
