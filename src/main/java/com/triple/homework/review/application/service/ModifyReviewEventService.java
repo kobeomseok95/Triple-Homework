@@ -1,13 +1,10 @@
 package com.triple.homework.review.application.service;
 
 import com.triple.homework.common.exception.review.NotWrittenReviewException;
-import com.triple.homework.common.exception.user.UserNotFoundException;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
-import com.triple.homework.user.application.port.out.UserPort;
-import com.triple.homework.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 class ModifyReviewEventService implements ReviewEventHandleUseCase {
 
     private final ReviewPort reviewPort;
-    private final UserPort userPort;
     private final CalculateReviewPointService calculateReviewPointService;
 
     @Override
@@ -30,14 +26,11 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
     public void handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         Review review = reviewPort.findByIdWithUserAttachedPhotos(reviewEventRequestDto.getReviewId())
                 .orElseThrow(NotWrittenReviewException::new);
-        User user = userPort.findById(reviewEventRequestDto.getUserId())
-                .orElseThrow(UserNotFoundException::new);
-//        Long differencePoint = calculateReviewPointService.calculatePoint(review, attachedPhotos, reviewEventRequestDto);
-
-        review.changeContent(reviewEventRequestDto.getContent());
-//        user.calculate(differencePoint);
-        // TODO: 2022/06/27 kobeomseok95 delete before attachedPhotos
-//        attachedPhotoPort.saveAll(AttachedPhoto.from(reviewEventRequestDto.getReviewId(),
-//                reviewEventRequestDto.getAttachedPhotoIds()));
+        Long point = calculateReviewPointService.calculatePointForModifyReview(review, reviewEventRequestDto);
+        review.modify(point,
+                reviewEventRequestDto.getContent(),
+                reviewEventRequestDto.getPlaceId(),
+                reviewEventRequestDto.getAttachedPhotoIds()
+        );
     }
 }

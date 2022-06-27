@@ -37,14 +37,17 @@ public class Review extends BaseEntity {
     @Column(length = 1000)
     private String content;
 
-    public void changeContent(String content) {
-        this.content = content;
-    }
-
     public void addAttachedPhotos(List<String> attachedPhotoIds) {
         if (attachedPhotos == null) {
             attachedPhotos = new AttachedPhotos();
         }
         attachedPhotos.add(this, attachedPhotoIds);
+    }
+
+    public void modify(Long point,
+                       String content,
+                       String placeId,
+                       List<String> attachedPhotoIds) {
+        // TODO: 2022/06/27 kobeomseok95 implement
     }
 }

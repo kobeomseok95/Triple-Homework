@@ -51,7 +51,7 @@ class AddReviewEventServiceTest {
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
         when(reviewPort.existsByUserIdAndPlaceId(any(), any()))
                 .thenReturn(false);
-        when(calculateReviewPointService.calculatePoint(requestDto))
+        when(calculateReviewPointService.calculatePointForAddReview(requestDto))
                 .thenReturn(3L);
         when(userPort.findById(any()))
                 .thenReturn(Optional.empty());
@@ -64,7 +64,7 @@ class AddReviewEventServiceTest {
         // then
         assertAll(
                 () -> verify(reviewPort).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
-                () -> verify(calculateReviewPointService).calculatePoint(requestDto),
+                () -> verify(calculateReviewPointService).calculatePointForAddReview(requestDto),
                 () -> verify(userPort).findById(requestDto.getUserId()),
                 () -> verify(userPort).save(any(User.class)),
                 () -> verify(reviewPort).save(any(Review.class))
@@ -79,7 +79,7 @@ class AddReviewEventServiceTest {
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
         when(reviewPort.existsByUserIdAndPlaceId(any(), any()))
                 .thenReturn(false);
-        when(calculateReviewPointService.calculatePoint(requestDto))
+        when(calculateReviewPointService.calculatePointForAddReview(requestDto))
                 .thenReturn(3L);
         when(userPort.findById(any()))
                 .thenReturn(Optional.of(UserFixture.user()));
@@ -92,7 +92,7 @@ class AddReviewEventServiceTest {
         // then
         assertAll(
                 () -> verify(reviewPort).existsByUserIdAndPlaceId(requestDto.getUserId(), requestDto.getPlaceId()),
-                () -> verify(calculateReviewPointService).calculatePoint(requestDto),
+                () -> verify(calculateReviewPointService).calculatePointForAddReview(requestDto),
                 () -> verify(userPort).findById(requestDto.getUserId()),
                 () -> verify(userPort, times(0)).save(any(User.class)),
                 () -> verify(reviewPort).save(any(Review.class))
