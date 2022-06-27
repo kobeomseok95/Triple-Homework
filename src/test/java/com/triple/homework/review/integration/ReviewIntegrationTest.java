@@ -120,7 +120,7 @@ public class ReviewIntegrationTest extends IntegrationTest {
     }
 
     @Sql("classpath:review-test.sql")
-    @DisplayName("리뷰 이벤트 MOD - 성공 / 첫 리뷰지만 컨텐츠, 사진을 첨부하지 않은 경우 2점 감소")
+    @DisplayName("리뷰 이벤트 DELETE - 성공 / 첫 리뷰지만 컨텐츠, 사진을 첨부하지 않은 경우 2점 감소")
     @Test
     void review_events_delete_success() throws Exception {
 
