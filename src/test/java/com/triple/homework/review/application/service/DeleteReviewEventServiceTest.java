@@ -4,9 +4,9 @@ import com.triple.homework.common.exception.review.ReviewNotFoundException;
 import com.triple.homework.fixture.ReviewFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
+import com.triple.homework.review.application.port.in.response.UserPointHistoryResponseDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
-import com.triple.homework.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,18 +48,18 @@ class DeleteReviewEventServiceTest {
         // given
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
         Review review = ReviewFixture.review();
-        User user = review.getUser();
-        Long beforePoints = user.getUserPoints();
         when(reviewPort.findByIdWithUserAttachedPhotos(any()))
                 .thenReturn(Optional.of(review));
 
         // when
-        deleteReviewEventService.handleEvent(requestDto);
+        UserPointHistoryResponseDto responseDto = deleteReviewEventService.handleEvent(requestDto);
 
         // then
         assertAll(
                 () -> verify(reviewPort).findByIdWithUserAttachedPhotos(requestDto.getReviewId()),
-                () -> verify(reviewPort).delete(review)
+                () -> verify(reviewPort).delete(review),
+                () -> assertEquals(review.getUser().getId(), responseDto.getUser().getId()),
+                () -> assertEquals(-review.getReviewPoints(), responseDto.getChangedPoint())
         );
     }
 }

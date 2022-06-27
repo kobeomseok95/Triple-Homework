@@ -3,7 +3,7 @@ package com.triple.homework.review.application.service;
 import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
 import com.triple.homework.review.application.port.in.ReviewEventHandleUseCase;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
-import com.triple.homework.review.application.port.in.response.UserPointHistoryResponse;
+import com.triple.homework.review.application.port.in.response.UserPointHistoryResponseDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
 import com.triple.homework.user.application.port.out.UserPort;
@@ -29,13 +29,13 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
     }
 
     @Override
-    public UserPointHistoryResponse handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
+    public UserPointHistoryResponseDto handleEvent(ReviewEventRequestDto reviewEventRequestDto) {
         validateExistReview(reviewEventRequestDto);
         Long point = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
         User user = findOrSave(reviewEventRequestDto.getUserId(), point);
         Review review = reviewPort.save(reviewEventRequestDto.toReview(user, point));
         review.addAttachedPhotos(reviewEventRequestDto.getAttachedPhotoIds());
-        return null;
+        return UserPointHistoryResponseDto.of(user, point);
     }
 
     private void validateExistReview(ReviewEventRequestDto reviewEventRequestDto) {

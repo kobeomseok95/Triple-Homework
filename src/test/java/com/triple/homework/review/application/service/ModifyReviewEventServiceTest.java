@@ -4,8 +4,10 @@ import com.triple.homework.common.exception.review.ReviewNotFoundException;
 import com.triple.homework.fixture.ReviewFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
+import com.triple.homework.review.application.port.in.response.UserPointHistoryResponseDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
+import com.triple.homework.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,18 +52,22 @@ class ModifyReviewEventServiceTest {
         // given
         ReviewEventRequestDto requestDto = ReviewEventRequestDtoBuilder.build();
         Review review = ReviewFixture.review();
+        Long beforeReviewPoints = review.getReviewPoints();
+        User user = review.getUser();
         when(reviewPort.findByIdWithUserAttachedPhotos(any()))
                 .thenReturn(Optional.of(review));
         when(calculateReviewPointService.calculatePoint(any()))
                 .thenReturn(1L);
 
         // when
-        modifyReviewEventService.handleEvent(requestDto);
+        UserPointHistoryResponseDto responseDto = modifyReviewEventService.handleEvent(requestDto);
 
         // then
         assertAll(
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
-                () -> verify(reviewPort).findByIdWithUserAttachedPhotos(requestDto.getReviewId())
+                () -> verify(reviewPort).findByIdWithUserAttachedPhotos(requestDto.getReviewId()),
+                () -> assertEquals(user.getId(), responseDto.getUser().getId()),
+                () -> assertEquals(beforeReviewPoints - 1L, responseDto.getChangedPoint())
         );
     }
 }

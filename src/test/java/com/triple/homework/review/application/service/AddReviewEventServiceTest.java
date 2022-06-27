@@ -4,6 +4,7 @@ import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceEx
 import com.triple.homework.fixture.UserFixture;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDtoBuilder;
+import com.triple.homework.review.application.port.in.response.UserPointHistoryResponseDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
 import com.triple.homework.user.application.port.out.UserPort;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,11 +57,14 @@ class AddReviewEventServiceTest {
                 .thenReturn(3L);
         when(userPort.findById(any()))
                 .thenReturn(Optional.empty());
+        User savedUser = UserFixture.user();
+        when(userPort.save(any()))
+                .thenReturn(savedUser);
         when(reviewPort.save(any()))
                 .thenReturn(mock(Review.class));
 
         // when
-        addReviewEventService.handleEvent(requestDto);
+        UserPointHistoryResponseDto responseDto = addReviewEventService.handleEvent(requestDto);
 
         // then
         assertAll(
@@ -67,7 +72,8 @@ class AddReviewEventServiceTest {
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userPort).findById(requestDto.getUserId()),
                 () -> verify(userPort).save(any(User.class)),
-                () -> verify(reviewPort).save(any(Review.class))
+                () -> verify(reviewPort).save(any(Review.class)),
+                () -> assertEquals(responseDto.getUser().getId(), savedUser.getId())
         );
     }
 
@@ -81,13 +87,14 @@ class AddReviewEventServiceTest {
                 .thenReturn(false);
         when(calculateReviewPointService.calculatePoint(requestDto))
                 .thenReturn(3L);
+        User findUser = UserFixture.user();
         when(userPort.findById(any()))
-                .thenReturn(Optional.of(UserFixture.user()));
+                .thenReturn(Optional.of(findUser));
         when(reviewPort.save(any()))
                 .thenReturn(mock(Review.class));
 
         // when
-        addReviewEventService.handleEvent(requestDto);
+        UserPointHistoryResponseDto responseDto = addReviewEventService.handleEvent(requestDto);
 
         // then
         assertAll(
@@ -95,7 +102,8 @@ class AddReviewEventServiceTest {
                 () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(userPort).findById(requestDto.getUserId()),
                 () -> verify(userPort, times(0)).save(any(User.class)),
-                () -> verify(reviewPort).save(any(Review.class))
+                () -> verify(reviewPort).save(any(Review.class)),
+                () -> assertEquals(responseDto.getUser().getId(), findUser.getId())
         );
     }
 }

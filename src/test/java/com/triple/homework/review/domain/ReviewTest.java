@@ -96,12 +96,11 @@ class ReviewTest {
         Long beforeUserPoints = user.getUserPoints();
 
         // when
-        Long reviewPoint = review.decreaseUsersPointAndReturnReviewPoint();
+        review.decreaseUsersPointAndReturnReviewPoint();
 
         // then
         assertAll(
-                () -> assertEquals(review.getReviewPoints(), reviewPoint),
-                () -> assertEquals(user.getUserPoints(), beforeUserPoints - reviewPoint)
+                () -> assertEquals(user.getUserPoints(), beforeUserPoints - review.getReviewPoints())
         );
     }
 }
