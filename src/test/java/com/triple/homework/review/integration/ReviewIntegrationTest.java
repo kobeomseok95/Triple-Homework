@@ -27,8 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ReviewIntegrationTest extends IntegrationTest {
 
-    @Autowired UserPort userPort;
-    @Autowired ReviewPort reviewPort;
+    @Autowired
+    UserPort userPort;
+    @Autowired
+    ReviewPort reviewPort;
 
     @DisplayName("이벤트 받기 - 유효하지 않은 입력값이 주어진 경우")
     @Test
@@ -114,6 +116,28 @@ public class ReviewIntegrationTest extends IntegrationTest {
                 () -> assertEquals(1, user.getUserPoints()),
                 () -> assertEquals(0, review.getAttachedPhotos().getAttachedPhotos().size()),
                 () -> assertEquals(1, review.getReviewPoints())
+        );
+    }
+
+    @Sql("classpath:review-test.sql")
+    @DisplayName("리뷰 이벤트 MOD - 성공 / 첫 리뷰지만 컨텐츠, 사진을 첨부하지 않은 경우 2점 감소")
+    @Test
+    void review_events_delete_success() throws Exception {
+
+        // given
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildDelete();
+
+        // when, then
+        mockMvc.perform(post("/events")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        flushAndClear();
+
+        User user = userPort.findById(request.getUserId()).get();
+        assertAll(
+                () -> assertThat(reviewPort.findByIdWithUserAttachedPhotos(request.getReviewId()).isEmpty()).isTrue(),
+                () -> assertThat(user.getUserPoints()).isEqualTo(0)
         );
     }
 }
