@@ -35,6 +35,6 @@ class ReviewRepository implements ReviewPort {
 
     @Override
     public void delete(Review review) {
-        // TODO: 2022/06/27 kobeomseok95 impl
+        reviewJpaRepository.delete(review);
     }
 }
