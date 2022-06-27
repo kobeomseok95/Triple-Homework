@@ -52,7 +52,7 @@ class ReviewTest {
         Long beforeReviewPoints = review.getReviewPoints();
 
         // when
-        Long changedUserPoints = review.modifyReviewAndReturnChangeUserPoints(calculatedPoint,
+        review.modify(calculatedPoint,
                 changeContent,
                 changePlaceId,
                 changeAttachedPhotoIds);

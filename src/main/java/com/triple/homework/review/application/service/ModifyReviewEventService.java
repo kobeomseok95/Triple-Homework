@@ -28,7 +28,7 @@ class ModifyReviewEventService implements ReviewEventHandleUseCase {
                 .orElseThrow(ReviewNotFoundException::new);
         Long calculatedPoint = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
         // TODO: 2022/06/27 kobeomseok95 리턴 값이 필요없다.
-        Long changedPoint = review.modifyReviewAndReturnChangeUserPoints(calculatedPoint,
+        review.modify(calculatedPoint,
                 reviewEventRequestDto.getContent(),
                 reviewEventRequestDto.getPlaceId(),
                 reviewEventRequestDto.getAttachedPhotoIds());
