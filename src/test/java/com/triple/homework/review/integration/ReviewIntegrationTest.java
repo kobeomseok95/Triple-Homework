@@ -85,6 +85,6 @@ public class ReviewIntegrationTest extends IntegrationTest {
         flushAndClear();
 
         User user = userPort.findById(request.getUserId()).get();
-        assertThat(user.getPointScore()).isEqualTo(3L);
+        assertThat(user.getUserPoints()).isEqualTo(3L);
     }
 }

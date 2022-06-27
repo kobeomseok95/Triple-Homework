@@ -9,7 +9,7 @@ public class UserFixture {
     public static User user() {
         return User.builder()
                 .id(UUID.randomUUID().toString())
-                .pointScore(0L)
+                .userPoints(0L)
                 .build();
     }
 }

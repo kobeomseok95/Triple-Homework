@@ -23,12 +23,13 @@ public class ReviewEventRequestDto {
     private String userId;
     private String placeId;
 
-    public Review toReview(User user) {
+    public Review toReview(User user, Long points) {
         return Review.builder()
                 .id(reviewId)
                 .user(user)
                 .content(content)
                 .placeId(placeId)
+                .reviewPoints(points)
                 .build();
     }
 }

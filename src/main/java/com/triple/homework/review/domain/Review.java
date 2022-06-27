@@ -37,6 +37,9 @@ public class Review extends BaseEntity {
     @Column(length = 1000)
     private String content;
 
+    @Column(nullable = false)
+    private Long reviewPoints;
+
     public void addAttachedPhotos(List<String> attachedPhotoIds) {
         if (attachedPhotos == null) {
             attachedPhotos = new AttachedPhotos();

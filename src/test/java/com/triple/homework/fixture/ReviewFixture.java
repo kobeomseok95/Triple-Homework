@@ -15,6 +15,7 @@ public class ReviewFixture {
                 .user(UserFixture.user())
                 .placeId(UUID.randomUUID().toString())
                 .content("테스트 컨텐츠")
+                .reviewPoints(2L)
                 .build();
     }
 

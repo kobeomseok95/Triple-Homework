@@ -24,16 +24,16 @@ public class User extends BaseEntity {
     private String id;
 
     @Column(nullable = false)
-    private Long pointScore;
+    private Long userPoints;
 
     public static User from(String userId, Long point) {
         return User.builder()
                 .id(userId)
-                .pointScore(point)
+                .userPoints(point)
                 .build();
     }
 
     public void calculate(Long point) {
-        pointScore += point;
+        userPoints += point;
     }
 }

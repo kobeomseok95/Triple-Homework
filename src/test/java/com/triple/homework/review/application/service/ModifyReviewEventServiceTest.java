@@ -51,15 +51,15 @@ class ModifyReviewEventServiceTest {
         Review review = ReviewFixture.review();
         when(reviewPort.findByIdWithUserAttachedPhotos(any()))
                 .thenReturn(Optional.of(review));
-        when(calculateReviewPointService.calculatePointForModifyReview(any() ,any()))
-                .thenReturn(-1L);
+        when(calculateReviewPointService.calculatePoint(any()))
+                .thenReturn(1L);
 
         // when
         modifyReviewEventService.handleEvent(requestDto);
 
         // then
         assertAll(
-                () -> verify(calculateReviewPointService).calculatePointForModifyReview(review, requestDto),
+                () -> verify(calculateReviewPointService).calculatePoint(requestDto),
                 () -> verify(reviewPort).findByIdWithUserAttachedPhotos(requestDto.getReviewId())
         );
     }

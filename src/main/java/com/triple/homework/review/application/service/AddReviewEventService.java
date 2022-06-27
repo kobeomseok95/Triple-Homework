@@ -32,7 +32,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
         validateExistReview(reviewEventRequestDto);
         Long point = calculateReviewPointService.calculatePoint(reviewEventRequestDto);
         User user = findOrSave(reviewEventRequestDto.getUserId(), point);
-        Review review = reviewPort.save(reviewEventRequestDto.toReview(user));
+        Review review = reviewPort.save(reviewEventRequestDto.toReview(user, point));
         review.addAttachedPhotos(reviewEventRequestDto.getAttachedPhotoIds());
     }
 

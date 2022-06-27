@@ -10,13 +10,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserTest {
 
-    User haveThreePointUser;
+    User user;
 
     @BeforeEach
     void setUp() {
-        haveThreePointUser = User.builder()
+        user = User.builder()
                 .id(UUID.randomUUID().toString())
-                .pointScore(0L)
+                .userPoints(0L)
                 .build();
     }
 
@@ -25,14 +25,14 @@ public class UserTest {
     void plus_point_when_user_add_review() throws Exception {
 
         // given
-        Long userPoints = haveThreePointUser.getPointScore();
+        Long userPoints = user.getUserPoints();
         Long plusPoint = 2L;
 
         // when
-        haveThreePointUser.calculate(plusPoint);
+        user.calculate(plusPoint);
 
         // then
-        assertThat(haveThreePointUser.getPointScore()).isEqualTo(userPoints + plusPoint);
+        assertThat(user.getUserPoints()).isEqualTo(userPoints + plusPoint);
     }
 
     @DisplayName("포인트 내역 반영 - 감소할 경우")
@@ -40,13 +40,13 @@ public class UserTest {
     void minus_point_when_user_add_review() throws Exception {
 
         // given
-        Long userPoints = haveThreePointUser.getPointScore();
+        Long userPoints = user.getUserPoints();
         Long plusPoint = -2L;
 
         // when
-        haveThreePointUser.calculate(plusPoint);
+        user.calculate(plusPoint);
 
         // then
-        assertThat(haveThreePointUser.getPointScore()).isEqualTo(userPoints + plusPoint);
+        assertThat(user.getUserPoints()).isEqualTo(userPoints + plusPoint);
     }
 }
