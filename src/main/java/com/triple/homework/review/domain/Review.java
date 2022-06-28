@@ -55,7 +55,7 @@ public class Review extends BaseEntity {
         checkPlaceId(placeId);
         Long changePoint = compareContentAttachedPhotosAndChangeUserPoints(content, attachedPhotoIds);
         this.content = content;
-        attachedPhotos.put(this, attachedPhotoIds);
+        attachedPhotos.update(this, attachedPhotoIds);
         return changePoint;
     }
 

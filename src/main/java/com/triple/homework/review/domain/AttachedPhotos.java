@@ -32,7 +32,7 @@ public class AttachedPhotos {
                 .collect(Collectors.toList()));
     }
 
-    public void put(Review review, List<String> newAttachedPhotoIds) {
+    public void update(Review review, List<String> newAttachedPhotoIds) {
         attachedPhotos.forEach(AttachedPhoto::delete);
         attachedPhotos.clear();
         add(review, newAttachedPhotoIds);

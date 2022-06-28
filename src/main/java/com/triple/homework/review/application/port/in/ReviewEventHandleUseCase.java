@@ -7,6 +7,5 @@ public interface ReviewEventHandleUseCase {
 
     String getCode();
 
-    // TODO: 2022/06/27 kobeomseok95 리턴 타입을 userId, Point를 반환하는 클래스 만들기
     UserPointHistoryResponseDto handleEvent(ReviewEventRequestDto reviewEventRequestDto);
 }
