@@ -10,7 +10,8 @@ services:
       MYSQL_ROOT_PASSWORD: triple
       TZ: Asia/Seoul
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d
       - ./db/data:/var/lib/mysql
     ports:
       - "3306:3306"
