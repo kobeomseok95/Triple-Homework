@@ -6,7 +6,7 @@ import com.triple.homework.common.exception.review.ReviewErrorCode;
 import com.triple.homework.common.exception.review.WrittenReviewByUserAndPlaceException;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequest;
 import com.triple.homework.review.adapter.in.request.ReviewEventRequestBuilder;
-import com.triple.homework.support.RestControllerTestSupport;
+import com.triple.homework.support.RestControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class ReviewEventRestControllerTest extends RestControllerTestSupport {
+class ReviewEventRestControllerTest extends RestControllerTest {
 
     @DisplayName("이벤트 받기 - 유효하지 않은 입력값이 주어진 경우")
     @Test
