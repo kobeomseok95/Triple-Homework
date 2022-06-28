@@ -54,6 +54,18 @@ public class ReviewEventRequestBuilder {
                 .build();
     }
 
+    public static ReviewEventRequest buildModifyChangeAttachedPhotoIds() {
+        return ReviewEventRequest.builder()
+                .type("REVIEW")
+                .action("MOD")
+                .reviewId("240a0658-dc5f-4878-9381-ebb7b2667772")
+                .userId("3ede0ef2-92b7-4817-a5f3-0c575361f745")
+                .placeId("2e4baf1c-5acb-4efb-a1af-eddada31b00f")
+                .content("수정내용")
+                .attachedPhotoIds(List.of("46cdeaf5-5fe3-40e7-b647-bd9a9d385cec", "afb0cef2-851d-4a50-bb07-9cc15cbdc332"))
+                .build();
+    }
+
     public static ReviewEventRequest buildDelete() {
         return ReviewEventRequest.builder()
                 .type("REVIEW")

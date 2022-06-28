@@ -32,10 +32,26 @@ public class AttachedPhotos {
                 .collect(Collectors.toList()));
     }
 
+    private void add(Review review, String attachedPhotoId) {
+        attachedPhotos.add(AttachedPhoto.from(review, attachedPhotoId));
+    }
+
     public void update(Review review, List<String> newAttachedPhotoIds) {
-        attachedPhotos.forEach(AttachedPhoto::delete);
-        attachedPhotos.clear();
-        add(review, newAttachedPhotoIds);
+        List<String> sourceAttachedPhotoIds = attachedPhotos.stream()
+                .map(AttachedPhoto::getId)
+                .collect(Collectors.toList());
+
+        newAttachedPhotoIds.forEach(newAttachedPhotoId -> {
+            if (!sourceAttachedPhotoIds.contains(newAttachedPhotoId)) {
+                add(review, newAttachedPhotoId);
+            }
+        });
+
+        List<AttachedPhoto> removeAttachedPhotos = attachedPhotos.stream()
+                .filter(addedAttachedPhoto -> !newAttachedPhotoIds.contains(addedAttachedPhoto.getId()))
+                .collect(Collectors.toList());
+        attachedPhotos.removeAll(removeAttachedPhotos);
+        removeAttachedPhotos.forEach(AttachedPhoto::delete);
     }
 
     public boolean isEmpty() {

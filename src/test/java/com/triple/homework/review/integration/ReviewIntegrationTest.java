@@ -120,6 +120,56 @@ public class ReviewIntegrationTest extends IntegrationTest {
     }
 
     @Sql("classpath:review-test.sql")
+    @DisplayName("리뷰 이벤트 MOD - 성공 / 첨부파일의 갯수가 변경되는 경우(추가)")
+    @Test
+    void review_events_mod_success_change_attached_photos_count_add() throws Exception {
+
+        // given
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildModifyChangeAttachedPhotoIds();
+
+        // when, then
+        mockMvc.perform(post("/events")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        flushAndClear();
+
+        Review review = reviewPort.findByIdWithUserAttachedPhotos(request.getReviewId()).get();
+        User user = review.getUser();
+        assertAll(
+                () -> assertEquals(3, user.getUserPoints()),
+                () -> assertEquals(request.getAttachedPhotoIds().size(),
+                        review.getAttachedPhotos().getAttachedPhotos().size()),
+                () -> assertEquals(3, review.getReviewPoints())
+        );
+    }
+
+    @Sql("classpath:review-test.sql")
+    @DisplayName("리뷰 이벤트 MOD - 성공 / 첨부파일의 갯수가 변경되는 경우(감소)")
+    @Test
+    void review_events_mod_success_change_attached_photos_count_remove() throws Exception {
+
+        // given
+        ReviewEventRequest request = ReviewEventRequestBuilder.buildModifyHaveNotContentAttachedPhotoIds();
+
+        // when, then
+        mockMvc.perform(post("/events")
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        flushAndClear();
+
+        Review review = reviewPort.findByIdWithUserAttachedPhotos(request.getReviewId()).get();
+        User user = review.getUser();
+        assertAll(
+                () -> assertEquals(1, user.getUserPoints()),
+                () -> assertEquals(request.getAttachedPhotoIds().size(),
+                        review.getAttachedPhotos().getAttachedPhotos().size()),
+                () -> assertEquals(1, review.getReviewPoints())
+        );
+    }
+
+    @Sql("classpath:review-test.sql")
     @DisplayName("리뷰 이벤트 DELETE - 성공 / 첫 리뷰지만 컨텐츠, 사진을 첨부하지 않은 경우 2점 감소")
     @Test
     void review_events_delete_success() throws Exception {
