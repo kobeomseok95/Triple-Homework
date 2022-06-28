@@ -1,0 +1,50 @@
+insert into USERS(USER_ID, USER_POINTS, CREATED_DATE, LAST_MODIFIED_DATE)
+values('3ede0ef2-92b7-4817-a5f3-0c575361f745', 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+insert into REVIEW(REVIEW_ID, USER_ID, PLACE_ID, CONTENT, REVIEW_POINTS, CREATED_DATE, LAST_MODIFIED_DATE)
+values('240a0658-dc5f-4878-9381-ebb7b2667772',
+       '3ede0ef2-92b7-4817-a5f3-0c575361f745',
+       '2e4baf1c-5acb-4efb-a1af-eddada31b00f',
+       '테스트1 - 첫 리뷰, 내용 작성, 사진 포함',
+       3,
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP);
+
+insert into ATTACHED_PHOTO(ATTACHED_PHOTO_ID, REVIEW_ID, CREATED_DATE, LAST_MODIFIED_DATE)
+values('46cdeaf5-5fe3-40e7-b647-bd9a9d385cec',
+       '240a0658-dc5f-4878-9381-ebb7b2667772',
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP);
+
+insert into REVIEW(REVIEW_ID, USER_ID, PLACE_ID, CONTENT, REVIEW_POINTS, CREATED_DATE, LAST_MODIFIED_DATE)
+values('ddec19cc-795f-499d-be81-af6de41e96dd',
+       '3ede0ef2-92b7-4817-a5f3-0c575361f745',
+       '284abdcf-3a4a-41b9-9553-eec5a8441c16',
+       '테스트2 - 첫 리뷰, 내용 작성, 사진 포함',
+       3,
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP);
+
+insert into ATTACHED_PHOTO(ATTACHED_PHOTO_ID, REVIEW_ID, CREATED_DATE, LAST_MODIFIED_DATE)
+values('a2ee8375-0e49-4931-9780-f4ab40244bad',
+       'ddec19cc-795f-499d-be81-af6de41e96dd',
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP);
+
+insert into REVIEW(REVIEW_ID, USER_ID, PLACE_ID, CONTENT, REVIEW_POINTS, CREATED_DATE, LAST_MODIFIED_DATE)
+values('d4e4d421-9c1f-49a0-8314-8e07ad53d57d',
+       '3ede0ef2-92b7-4817-a5f3-0c575361f745',
+       '68266b02-8e40-4fee-946a-4031e53d58c0',
+       '테스트3 - 첫 리뷰, 내용 작성',
+       2,
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP);
+
+insert into REVIEW(REVIEW_ID, USER_ID, PLACE_ID, CONTENT, REVIEW_POINTS, CREATED_DATE, LAST_MODIFIED_DATE)
+values('302f455c-372c-474d-bcb6-4e9eb54c0cf8',
+       '3ede0ef2-92b7-4817-a5f3-0c575361f745',
+       '131cba76-6611-4d7c-9863-08efafcad874',
+       '테스트4 - 첫 리뷰, 내용 작성',
+       2,
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP);
