@@ -36,6 +36,7 @@ public class AttachedPhotos {
         attachedPhotos.add(AttachedPhoto.from(review, attachedPhotoId));
     }
 
+    // FIXME: 2022/07/11 kobeomseok95 Set 자료구조를 이용한다면?
     public void update(Review review, List<String> newAttachedPhotoIds) {
         List<String> sourceAttachedPhotoIds = attachedPhotos.stream()
                 .map(AttachedPhoto::getId)

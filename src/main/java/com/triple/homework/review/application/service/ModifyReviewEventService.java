@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 class ModifyReviewEventService implements ReviewEventHandleUseCase {
 
     private final ReviewPort reviewPort;
+    // FIXME: 2022/07/11 kobeomseok95 삭제
     private final CalculateReviewPointService calculateReviewPointService;
 
     @Override

@@ -46,6 +46,7 @@ class AddReviewEventService implements ReviewEventHandleUseCase {
         }
     }
 
+    // FIXME: 2022/07/10 kobeomseok95 적절한 위치는 아닌 것 같다.
     private User findOrSave(String userId, Long point) {
         Optional<User> user = userPort.findById(userId);
         if (user.isEmpty()) {

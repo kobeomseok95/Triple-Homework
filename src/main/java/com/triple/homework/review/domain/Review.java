@@ -67,12 +67,14 @@ public class Review extends BaseEntity {
 
     private Long compareContentAttachedPhotosAndChangeUserPoints(String content, List<String> attachedPhotoIds) {
         Long changePoint = 0L;
+        // FIXME: 2022/07/11 kobeomseok95 유의미한 메서드로 따로 빼보는건 어떨까?
         if (StringUtils.hasText(this.content) && !StringUtils.hasText(content)) {
             changePoint -= 1L;
         } else if (!StringUtils.hasText(this.content) && StringUtils.hasText(content)) {
             changePoint += 1L;
         }
 
+        // FIXME: 2022/07/11 kobeomseok95 유의미한 메서드로 따로 빼보는건 어떨까?
         if (!this.attachedPhotos.isEmpty() && attachedPhotoIds.isEmpty()) {
             changePoint -= 1L;
         } else if(this.attachedPhotos.isEmpty() && !attachedPhotoIds.isEmpty()) {
