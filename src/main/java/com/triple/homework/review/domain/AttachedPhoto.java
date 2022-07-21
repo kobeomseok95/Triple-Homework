@@ -1,15 +1,10 @@
 package com.triple.homework.review.domain;
 
 import com.triple.homework.common.entity.BaseEntity;
-import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class AttachedPhoto extends BaseEntity {
 
     @Id
@@ -20,6 +15,14 @@ public class AttachedPhoto extends BaseEntity {
     @JoinColumn(name = "REVIEW_ID", nullable = false)
     private Review review;
 
+    protected AttachedPhoto(String id, Review review) {
+        this.id = id;
+        this.review = review;
+    }
+
+    protected AttachedPhoto() {
+    }
+
     public static AttachedPhoto from(Review review, String attachedPhotoId) {
         return AttachedPhoto.builder()
                 .id(attachedPhotoId)
@@ -27,7 +30,45 @@ public class AttachedPhoto extends BaseEntity {
                 .build();
     }
 
+    public static AttachedPhotoBuilder builder() {
+        return new AttachedPhotoBuilder();
+    }
+
     public void delete() {
         this.review = null;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public Review getReview() {
+        return this.review;
+    }
+
+    public static class AttachedPhotoBuilder {
+        private String id;
+        private Review review;
+
+        AttachedPhotoBuilder() {
+        }
+
+        public AttachedPhotoBuilder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public AttachedPhotoBuilder review(Review review) {
+            this.review = review;
+            return this;
+        }
+
+        public AttachedPhoto build() {
+            return new AttachedPhoto(id, review);
+        }
+
+        public String toString() {
+            return "AttachedPhoto.AttachedPhotoBuilder(id=" + this.id + ", review=" + this.review + ")";
+        }
     }
 }

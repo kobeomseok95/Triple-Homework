@@ -3,20 +3,12 @@ package com.triple.homework.review.domain;
 import com.triple.homework.common.entity.BaseEntity;
 import com.triple.homework.common.exception.review.PlaceIdIsDifferentException;
 import com.triple.homework.user.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"USER_ID", "PLACE_ID"})
 })
@@ -41,6 +33,22 @@ public class Review extends BaseEntity {
 
     @Column(nullable = false)
     private Long reviewPoints;
+
+    public Review(String id, User user, AttachedPhotos attachedPhotos, String placeId, String content, Long reviewPoints) {
+        this.id = id;
+        this.user = user;
+        this.attachedPhotos = attachedPhotos;
+        this.placeId = placeId;
+        this.content = content;
+        this.reviewPoints = reviewPoints;
+    }
+
+    public Review() {
+    }
+
+    public static ReviewBuilder builder() {
+        return new ReviewBuilder();
+    }
 
     public void addAttachedPhotos(List<String> attachedPhotoIds) {
         if (attachedPhotos == null) {
@@ -88,5 +96,79 @@ public class Review extends BaseEntity {
 
     public void decreaseUsersPointAndReturnReviewPoint() {
         user.calculate(-reviewPoints);
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public AttachedPhotos getAttachedPhotos() {
+        return this.attachedPhotos;
+    }
+
+    public String getPlaceId() {
+        return this.placeId;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public Long getReviewPoints() {
+        return this.reviewPoints;
+    }
+
+    public static class ReviewBuilder {
+        private String id;
+        private User user;
+        private AttachedPhotos attachedPhotos;
+        private String placeId;
+        private String content;
+        private Long reviewPoints;
+
+        ReviewBuilder() {
+        }
+
+        public ReviewBuilder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public ReviewBuilder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public ReviewBuilder attachedPhotos(AttachedPhotos attachedPhotos) {
+            this.attachedPhotos = attachedPhotos;
+            return this;
+        }
+
+        public ReviewBuilder placeId(String placeId) {
+            this.placeId = placeId;
+            return this;
+        }
+
+        public ReviewBuilder content(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public ReviewBuilder reviewPoints(Long reviewPoints) {
+            this.reviewPoints = reviewPoints;
+            return this;
+        }
+
+        public Review build() {
+            return new Review(id, user, attachedPhotos, placeId, content, reviewPoints);
+        }
+
+        public String toString() {
+            return "Review.ReviewBuilder(id=" + this.id + ", user=" + this.user + ", attachedPhotos=" + this.attachedPhotos + ", placeId=" + this.placeId + ", content=" + this.content + ", reviewPoints=" + this.reviewPoints + ")";
+        }
     }
 }

@@ -1,11 +1,7 @@
 package com.triple.homework.common.exception.review;
 
 import com.triple.homework.common.exception.ErrorEnumCode;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
 public enum ReviewErrorCode implements ErrorEnumCode {
 
     NOT_FOUND_ACTION(1101, "Action Code를 찾을 수 없습니다."),
@@ -15,4 +11,17 @@ public enum ReviewErrorCode implements ErrorEnumCode {
 
     private final int code;
     private final String message;
+
+    private ReviewErrorCode(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public int getCode() {
+        return this.code;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
 }

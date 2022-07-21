@@ -2,7 +2,6 @@ package com.triple.homework.review.application.service;
 
 import com.triple.homework.review.application.port.in.request.ReviewEventRequestDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -10,11 +9,14 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 class CalculateReviewPointService {
 
     private final ReviewPort reviewPort;
+
+    public CalculateReviewPointService(ReviewPort reviewPort) {
+        this.reviewPort = reviewPort;
+    }
 
     public Long calculatePoint(ReviewEventRequestDto requestDto) {
         Long point = 0L;

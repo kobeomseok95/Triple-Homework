@@ -7,18 +7,21 @@ import com.triple.homework.review.application.port.in.request.ReviewEventRequest
 import com.triple.homework.review.application.port.in.response.UserPointHistoryResponseDto;
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 class ModifyReviewEventService implements ReviewEventHandleUseCase {
 
     private final ReviewPort reviewPort;
     // FIXME: 2022/07/11 kobeomseok95 삭제
     private final CalculateReviewPointService calculateReviewPointService;
+
+    public ModifyReviewEventService(ReviewPort reviewPort, CalculateReviewPointService calculateReviewPointService) {
+        this.reviewPort = reviewPort;
+        this.calculateReviewPointService = calculateReviewPointService;
+    }
 
     @Override
     public String getCode() {

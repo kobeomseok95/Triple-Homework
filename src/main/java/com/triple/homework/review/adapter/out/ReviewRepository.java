@@ -2,16 +2,18 @@ package com.triple.homework.review.adapter.out;
 
 import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 class ReviewRepository implements ReviewPort {
 
     private final ReviewJpaRepository reviewJpaRepository;
+
+    public ReviewRepository(ReviewJpaRepository reviewJpaRepository) {
+        this.reviewJpaRepository = reviewJpaRepository;
+    }
 
     @Override
     public boolean existsByUserIdAndPlaceId(String userId, String placeId) {

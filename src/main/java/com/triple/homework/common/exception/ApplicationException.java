@@ -1,8 +1,5 @@
 package com.triple.homework.common.exception;
 
-import lombok.Getter;
-
-@Getter
 public class ApplicationException extends RuntimeException {
 
     private ErrorEnumCode errorEnumCode;
@@ -25,5 +22,9 @@ public class ApplicationException extends RuntimeException {
 
     public ApplicationException(Throwable cause) {
         super(cause);
+    }
+
+    public ErrorEnumCode getErrorEnumCode() {
+        return this.errorEnumCode;
     }
 }

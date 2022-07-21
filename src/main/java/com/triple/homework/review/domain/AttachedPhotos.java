@@ -1,7 +1,5 @@
 package com.triple.homework.review.domain;
 
-import lombok.*;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
@@ -11,20 +9,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Embeddable
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class AttachedPhotos {
 
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "review",
-            cascade = CascadeType.PERSIST,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    @Builder.Default
     private List<AttachedPhoto> attachedPhotos = new ArrayList<>();
+
+    protected AttachedPhotos(List<AttachedPhoto> attachedPhotos) {
+        this.attachedPhotos = attachedPhotos;
+    }
+
+    protected AttachedPhotos() {
+    }
+
+    private static List<AttachedPhoto> $default$attachedPhotos() {
+        return new ArrayList<>();
+    }
+
+    public static AttachedPhotosBuilder builder() {
+        return new AttachedPhotosBuilder();
+    }
 
     public void add(Review review, List<String> attachedPhotoIds) {
         attachedPhotos.addAll(attachedPhotoIds.stream()
@@ -36,7 +44,6 @@ public class AttachedPhotos {
         attachedPhotos.add(AttachedPhoto.from(review, attachedPhotoId));
     }
 
-    // FIXME: 2022/07/11 kobeomseok95 Set 자료구조를 이용한다면?
     public void update(Review review, List<String> newAttachedPhotoIds) {
         List<String> sourceAttachedPhotoIds = attachedPhotos.stream()
                 .map(AttachedPhoto::getId)
@@ -57,5 +64,39 @@ public class AttachedPhotos {
 
     public boolean isEmpty() {
         return attachedPhotos.isEmpty();
+    }
+
+    public void clear() {
+        attachedPhotos.clear();
+    }
+
+    public List<AttachedPhoto> getAttachedPhotos() {
+        return this.attachedPhotos;
+    }
+
+    public static class AttachedPhotosBuilder {
+        private List<AttachedPhoto> attachedPhotos$value;
+        private boolean attachedPhotos$set;
+
+        AttachedPhotosBuilder() {
+        }
+
+        public AttachedPhotosBuilder attachedPhotos(List<AttachedPhoto> attachedPhotos) {
+            this.attachedPhotos$value = attachedPhotos;
+            this.attachedPhotos$set = true;
+            return this;
+        }
+
+        public AttachedPhotos build() {
+            List<AttachedPhoto> attachedPhotos$value = this.attachedPhotos$value;
+            if (!this.attachedPhotos$set) {
+                attachedPhotos$value = AttachedPhotos.$default$attachedPhotos();
+            }
+            return new AttachedPhotos(attachedPhotos$value);
+        }
+
+        public String toString() {
+            return "AttachedPhotos.AttachedPhotosBuilder(attachedPhotos$value=" + this.attachedPhotos$value + ")";
+        }
     }
 }

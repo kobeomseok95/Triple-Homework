@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+// FIXME: 2022/07/13 kobeomseok95 동시성 제어 관련한 LOCK 의 필요성
 interface ReviewJpaRepository extends JpaRepository<Review, String> {
 
     boolean existsByUserIdAndPlaceId(String userId, String placeId);

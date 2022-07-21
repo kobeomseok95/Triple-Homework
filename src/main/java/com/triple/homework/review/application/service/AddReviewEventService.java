@@ -9,20 +9,24 @@ import com.triple.homework.review.application.port.out.ReviewPort;
 import com.triple.homework.review.domain.Review;
 import com.triple.homework.user.application.port.out.UserPort;
 import com.triple.homework.user.domain.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 class AddReviewEventService implements ReviewEventHandleUseCase {
 
     private final ReviewPort reviewPort;
     private final CalculateReviewPointService calculateReviewPointService;
     private final UserPort userPort;
+
+    public AddReviewEventService(ReviewPort reviewPort, CalculateReviewPointService calculateReviewPointService, UserPort userPort) {
+        this.reviewPort = reviewPort;
+        this.calculateReviewPointService = calculateReviewPointService;
+        this.userPort = userPort;
+    }
 
     @Override
     public String getCode() {
